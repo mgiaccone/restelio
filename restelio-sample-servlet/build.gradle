@@ -1,0 +1,20 @@
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+apply plugin: 'java'
+apply plugin: "jacoco"
+apply plugin: "war"
+
+//ext {
+//    logbackVersion  = "1.1.2"
+//}
+
+//// Java Compiler
+//compileJava {
+//    sourceCompatibility = 1.6
+//    targetCompatibility = 1.6
+//}
+
+dependencies {
+    compile "restelio:restelio-http-servlet:${version}",
+            "restelio:restelio-sample-core:${version}"
+}

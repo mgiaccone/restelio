@@ -1,4 +1,4 @@
-package com.restelio.router;
+package restelio.router;
 
 public interface RestelioRouteMatcher {
 }

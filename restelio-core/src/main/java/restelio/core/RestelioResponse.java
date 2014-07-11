@@ -1,4 +1,4 @@
-package com.restelio.router;
+package restelio.core;
 
 public class RestelioResponse {
 }

@@ -8,4 +8,5 @@ include 'restelio-security-core'
 include 'restelio-security-oauth2'
 include 'restelio-http-servlet'
 include 'restelio-http-netty'
-
+include 'restelio-sample-core'
+include 'restelio-sample-servlet'

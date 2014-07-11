@@ -1,4 +1,4 @@
-package com.restelio.filter;
+package restelio.filter;
 
 public interface RestelioFilter {
 

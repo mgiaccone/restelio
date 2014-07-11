@@ -1,0 +1,24 @@
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+apply plugin: 'java'
+apply plugin: "jacoco"
+
+//ext {
+//    logbackVersion  = "1.1.2"
+//}
+
+//// Java Compiler
+//compileJava {
+//    sourceCompatibility = 1.6
+//    targetCompatibility = 1.6
+//}
+
+dependencies {
+    compile "restelio:restelio-core:${version}",
+            "restelio:restelio-security-basic",
+            "restelio:restelio-security-oauth2",
+            "ch.qos.logback:logback-core:${logbackVersion}",
+            "ch.qos.logback:logback-classic:${logbackVersion}"
+
+    testCompile "junit:junit:${junitVersion}"
+}

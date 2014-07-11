@@ -1,12 +1,9 @@
-apply plugin: 'java'
-
-sourceCompatibility = 1.5
-version = '1.0'
-
-repositories {
-    mavenCentral()
+ext {
+    servletVersion = "2.5"
 }
 
 dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.11'
+    compile "restelio:restelio-core:${version}"
+
+    runtime "javax.servlet:servlet-api:${servletVersion}"
 }

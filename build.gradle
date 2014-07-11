@@ -1,12 +1,64 @@
-apply plugin: 'java'
+//buildscript {
+//    repositories {
+//        mavenLocal()
+//        mavenCentral()
+//        jcenter()
+//    }
+////
+////    dependencies {
+////        classpath "net.saliman:gradle-cobertura-plugin:+"
+////    }
+//}
 
-sourceCompatibility = 1.5
-version = '1.0'
+ext {
+    logbackVersion  = "1.1.2"
+    jacksonVersion  = "2.3.2"
+    junitVersion    = "4.11"
+    slf4jVersion    = "1.7.7"
 
-repositories {
-    mavenCentral()
+    frameworkProjects = subprojects.findAll {
+        it.name == 'restelio-admin-gui' ||
+        it.name == 'restelio-core' ||
+        it.name == 'restelio-datastore-core' ||
+        it.name == 'restelio-security-basic' ||
+        it.name == 'restelio-security-core' ||
+        it.name == 'restelio-security-oauth2' ||
+        it.name == 'restelio-http-servlet' ||
+        it.name == 'restelio-http-netty'
+    }
 }
 
-dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.11'
+// All projects
+allprojects {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        jcenter()
+    }
+
+    group = "restelio"
+    version = '1.0'
+
+    apply plugin: 'eclipse'
+    apply plugin: 'idea'
+    apply plugin: 'java'
+    apply plugin: "jacoco"
+
+    // Java Compiler
+    compileJava {
+        sourceCompatibility = 1.6
+        targetCompatibility = 1.6
+    }
+}
+
+// Framework projects configuration
+configure(project.frameworkProjects) {
+    dependencies {
+        compile "org.slf4j:slf4j-api:${slf4jVersion}",
+                "org.slf4j:jcl-over-slf4j:${slf4jVersion}"
+
+        testCompile "junit:junit:${junitVersion}",
+                "ch.qos.logback:logback-core:${logbackVersion}",
+                "ch.qos.logback:logback-classic:${logbackVersion}"
+    }
 }
