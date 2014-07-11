@@ -14,9 +14,9 @@ apply plugin: "jacoco"
 //}
 
 dependencies {
-    compile "restelio:restelio-core:${version}",
-            "restelio:restelio-security-basic",
-            "restelio:restelio-security-oauth2",
+    compile project(':restelio-core'),
+            project(':restelio-security-basic'),
+            project(':restelio-security-oauth2'),
             "ch.qos.logback:logback-core:${logbackVersion}",
             "ch.qos.logback:logback-classic:${logbackVersion}"
 

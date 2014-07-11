@@ -11,9 +11,11 @@
 //}
 
 ext {
+    jacocoVersion   = "0.7.1.201405082137"
     logbackVersion  = "1.1.2"
     jacksonVersion  = "2.3.2"
     junitVersion    = "4.11"
+    servletVersion  = "2.5"
     slf4jVersion    = "1.7.7"
 
     frameworkProjects = subprojects.findAll {
@@ -60,5 +62,17 @@ configure(project.frameworkProjects) {
         testCompile "junit:junit:${junitVersion}",
                 "ch.qos.logback:logback-core:${logbackVersion}",
                 "ch.qos.logback:logback-classic:${logbackVersion}"
+    }
+
+    jacoco {
+        toolVersion = jacocoVersion
+    }
+
+    jacocoTestReport {
+        reports {
+            xml.enabled true
+            csv.enabled false
+            html.enabled true
+        }
     }
 }

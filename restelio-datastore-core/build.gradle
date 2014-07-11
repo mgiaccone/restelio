@@ -1,3 +1,3 @@
 dependencies {
-    compile "restelio:restelio-core:${version}"
+    compile project(':restelio-core')
 }

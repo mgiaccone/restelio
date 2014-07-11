@@ -1,9 +1,5 @@
-ext {
-    servletVersion = "2.5"
-}
-
 dependencies {
-    compile "restelio:restelio-core:${version}"
+    compile project(':restelio-core')
 
-    runtime "javax.servlet:servlet-api:${servletVersion}"
+    compile "javax.servlet:servlet-api:${servletVersion}"
 }
