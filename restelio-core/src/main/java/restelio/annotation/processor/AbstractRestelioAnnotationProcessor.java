@@ -1,4 +1,4 @@
-package restelio.processor;
+package restelio.annotation.processor;
 
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.RoundEnvironment;

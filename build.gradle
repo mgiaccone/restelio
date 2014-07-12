@@ -11,9 +11,10 @@
 //}
 
 ext {
+    guavaVersion    = "17.0"
     jacocoVersion   = "0.7.1.201405082137"
     logbackVersion  = "1.1.2"
-    jacksonVersion  = "2.3.2"
+    jacksonVersion  = "2.4.1.1"
     junitVersion    = "4.11"
     servletVersion  = "2.5"
     slf4jVersion    = "1.7.7"
@@ -39,7 +40,7 @@ allprojects {
     }
 
     group = "restelio"
-    version = '1.0'
+    version = '1.0.0'
 
     apply plugin: 'eclipse'
     apply plugin: 'idea'
