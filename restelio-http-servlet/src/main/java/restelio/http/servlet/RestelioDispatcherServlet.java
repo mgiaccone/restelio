@@ -26,49 +26,31 @@ public class RestelioDispatcherServlet extends HttpServlet {
         this.routeHandler = restelio.getRouteHandler();
     }
 
+    @Override
+    protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String method = request.getMethod();
+        if (HttpMethod.GET.name().equals(method)) {
+            handleRoute(HttpMethod.GET, request, response);
+        } else if (HttpMethod.POST.name().equals(method)) {
+            handleRoute(HttpMethod.POST, request, response);
+        } else if (HttpMethod.PUT.name().equals(method)) {
+            handleRoute(HttpMethod.PUT, request, response);
+        } else if (HttpMethod.DELETE.name().equals(method)) {
+            handleRoute(HttpMethod.DELETE, request, response);
+        } else {
+            response.sendError(HttpStatus.METHOD_NOT_ALLOWED.getCode());
+        }
+    }
+
+    /**
+     * Transfer the request to the route handler
+     *
+     * @param method HTTP Method
+     * @param request HTTP Servlet Request
+     * @param response HTTP Servlet Response
+     */
     private void handleRoute(HttpMethod method, HttpServletRequest request, HttpServletResponse response) {
-        routeHandler.handle(
-                new HttpServletRequestWrapper(request),
-                new HttpServletResponseWrapper(response));
+        routeHandler.handle(new HttpServletRequestWrapper(request), new HttpServletResponseWrapper(response));
     }
 
-    @Override
-    protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        super.service(req, resp);
-    }
-
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        handleRoute(HttpMethod.GET, request, response);
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        handleRoute(HttpMethod.POST, request, response);
-    }
-
-    @Override
-    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        handleRoute(HttpMethod.PUT, request, response);
-    }
-
-    @Override
-    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        handleRoute(HttpMethod.DELETE, request, response);
-    }
-
-    @Override
-    protected void doHead(HttpServletRequest request, HttpServletResponse resp) throws ServletException, IOException {
-        resp.sendError(HttpStatus.METHOD_NOT_ALLOWED.getCode());
-    }
-
-    @Override
-    protected void doOptions(HttpServletRequest request, HttpServletResponse resp) throws ServletException, IOException {
-        resp.sendError(HttpStatus.METHOD_NOT_ALLOWED.getCode());
-    }
-
-    @Override
-    protected void doTrace(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.sendError(HttpStatus.METHOD_NOT_ALLOWED.getCode());
-    }
 }
