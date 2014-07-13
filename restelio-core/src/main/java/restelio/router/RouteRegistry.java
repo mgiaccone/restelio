@@ -1,4 +1,4 @@
-package restelio.router.registry;
+package restelio.router;
 
 import com.google.common.base.Optional;
 import com.google.common.base.Splitter;
@@ -7,7 +7,7 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import restelio.http.HttpMethod;
+import restelio.Restelio.HttpMethod;
 
 import java.util.EnumMap;
 import java.util.LinkedList;
@@ -18,32 +18,19 @@ import java.util.regex.Pattern;
 
 /**
  * Singleton graph based route registry
+ * @author Matteo Giaccone
  */
 public class RouteRegistry {
 
     static final Logger log = LoggerFactory.getLogger(RouteRegistry.class);
 
-    private static final Pattern REGEX_PARAM = Pattern.compile("(?:\\{(\\w+)\\})");
-    private static final String FORWARD_SLASH = "/";
-
-    private static RouteRegistry instance;
+    private static final Pattern REGEX_PARAM    = Pattern.compile("(?:\\{(\\w+)\\})");
+    private static final String FORWARD_SLASH   = "/";
 
     private RouteNode rootNode;
 
-    private RouteRegistry() {
+    public RouteRegistry() {
         rootNode = RouteNode.root();
-    }
-
-    /**
-     * Get the static instance of the RouteRegistry
-     *
-     * @return A singleton instance of the RouteRegistry
-     */
-    public static RouteRegistry get() {
-        if (instance == null) {
-            instance = new RouteRegistry();
-        }
-        return instance;
     }
 
     /**
@@ -67,6 +54,25 @@ public class RouteRegistry {
         }
     }
 
+    private RouteInfo registerInternal(RouteNode parentNode, LinkedList<String> path, RouteInfo routeInfo) {
+        if (path.size() > 0) {
+            String segment = path.pop();
+            RouteNode child = parentNode.findOrCreateNode(segment, isParameter(segment));
+            return registerInternal(child, path, routeInfo);
+        } else {
+            // Root or leaf node
+            parentNode.setRouteInfo(routeInfo);
+        }
+        return routeInfo;
+    }
+
+    /**
+     * Find a route given the HTTP method and a path
+     *
+     * @param method the route HTTP Method
+     * @param path the route path
+     * @return A route match if the route was found, throws and exception if the route is not available
+     */
     public RouteMatchResult find(HttpMethod method, String path) {
         Optional<RouteMatchResult> result = findInternal(rootNode, method, splitPath(path));
         if (result.isPresent()) {
@@ -102,18 +108,6 @@ public class RouteRegistry {
             }
         }
         return Optional.absent();
-    }
-
-    private RouteInfo registerInternal(RouteNode parentNode, LinkedList<String> path, RouteInfo routeInfo) {
-        if (path.size() > 0) {
-            String segment = path.pop();
-            RouteNode child = parentNode.findOrCreateNode(segment, isParameter(segment));
-            return registerInternal(child, path, routeInfo);
-        } else {
-            // Root or leaf node
-            parentNode.setRouteInfo(routeInfo);
-        }
-        return routeInfo;
     }
 
     private boolean isPathValid(String path) {
@@ -234,7 +228,8 @@ public class RouteRegistry {
      */
     private static class RouteNode {
 
-        private static final String ID_ROOT = "_root_";
+        private static final String ID_ROOT     = "__ROOT__";
+        private static final String ID_PARAM    = "__PARAM__";
 
         public static RouteNode root() {
             return new RouteNode(ID_ROOT, false);
@@ -249,7 +244,6 @@ public class RouteRegistry {
         private final EnumMap<HttpMethod, RouteInfo> routeInfoMap = Maps.newEnumMap(HttpMethod.class);
         private final Optional<String> paramName;
         private final boolean parameter;
-        private Optional<RouteNode> paramNode;
 
         private RouteNode(String nodeId, boolean parameter) {
             Matcher m = REGEX_PARAM.matcher(nodeId);
@@ -257,7 +251,6 @@ public class RouteRegistry {
             this.nodeId = nodeId;
             this.parameter = parameter;
             this.paramName = Optional.fromNullable((m.matches()) ? m.group(1) : null);
-            this.paramNode = Optional.absent();
         }
 
         public Optional<RouteInfo> getRouteInfo(HttpMethod method) {
@@ -282,9 +275,10 @@ public class RouteRegistry {
 
         public Optional<RouteNode> findNode(String segment) {
             RouteNode child = children.get(segment);
-            if (child == null && paramNode.isPresent()) {
-                // Not a segment, try to see if it is a parameter
-                child = paramNode.get();
+
+            // Not a segment? try to see if it is a parameter
+            if (child == null) {
+                child = children.get(ID_PARAM);
             }
             return Optional.fromNullable(child);
         }
@@ -294,13 +288,7 @@ public class RouteRegistry {
             if (!child.isPresent()) {
                 RouteNode childNode = RouteNode.childNode(nodeId, parameter);
                 child = Optional.of(childNode);
-                if (!parameter) {
-                    // Add segment to path
-                    children.put(nodeId, childNode);
-                } else {
-                    // Set the parameter node for this segment in path
-                    paramNode = Optional.fromNullable(childNode);
-                }
+                children.put(((parameter) ? ID_PARAM : nodeId), childNode);
             }
             return child.get();
         }
@@ -315,10 +303,6 @@ public class RouteRegistry {
 
         public Optional<String> getParamName() {
             return paramName;
-        }
-
-        public Optional<RouteNode> getParamNode() {
-            return paramNode;
         }
 
     }

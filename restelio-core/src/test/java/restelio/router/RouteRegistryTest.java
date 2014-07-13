@@ -4,11 +4,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import restelio.http.HttpMethod;
-import restelio.router.registry.RouteRegistrationException;
-import restelio.router.registry.RouteNotFoundException;
-import restelio.router.registry.RouteRegistry;
-import restelio.router.registry.RouteRegistry.RouteCallback;
+import restelio.Restelio.HttpMethod;
+import restelio.router.RouteRegistry.RouteCallback;
 
 public class RouteRegistryTest {
 
@@ -22,7 +19,7 @@ public class RouteRegistryTest {
 
     @BeforeClass
     public static void setup() {
-        registry = RouteRegistry.get();
+        registry = new RouteRegistry();
 
         // Initialize test routes
         registry.register(HttpMethod.GET, "/", mockRouteCallback());

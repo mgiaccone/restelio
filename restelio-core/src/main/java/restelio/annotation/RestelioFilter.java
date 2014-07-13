@@ -6,12 +6,12 @@ import java.lang.annotation.Inherited;
 import java.lang.annotation.Target;
 
 /**
- * Annotation to mark a Restelio factory
+ * Annotation to mark a REST resource
  * @author Matteo Giaccone
  */
 @Documented
 @Inherited
 @Target(ElementType.TYPE)
-public @interface RestelioFactory {
+public @interface RestelioFilter {
 
 }

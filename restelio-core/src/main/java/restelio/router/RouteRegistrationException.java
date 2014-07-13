@@ -1,7 +1,11 @@
-package restelio.router.registry;
+package restelio.router;
 
-import restelio.router.registry.RouteRegistry.RouteInfo;
+import restelio.router.RouteRegistry.RouteInfo;
 
+/**
+ * Exception to report route registration issues
+ * @author Matteo Giaccone
+ */
 public class RouteRegistrationException extends RuntimeException {
 
     public RouteRegistrationException(String message, RouteInfo routeInfo) {
