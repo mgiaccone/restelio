@@ -2,15 +2,23 @@ package restelio.router;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import restelio.http.HttpMethod;
+import restelio.router.registry.RouteRegistrationException;
 import restelio.router.registry.RouteNotFoundException;
 import restelio.router.registry.RouteRegistry;
 import restelio.router.registry.RouteRegistry.RouteCallback;
-import restelio.router.registry.DuplicateRouteException;
 
 public class RouteRegistryTest {
 
+    static final Logger log = LoggerFactory.getLogger(RouteRegistryTest.class);
+
     private static RouteRegistry registry;
+
+    private static RouteCallback mockRouteCallback() {
+        return new RouteCallback() {};
+    }
 
     @BeforeClass
     public static void setup() {
@@ -25,35 +33,37 @@ public class RouteRegistryTest {
         registry.register(HttpMethod.PUT, "/users/{id}", mockRouteCallback());
         registry.register(HttpMethod.GET, "/users/{id}/orders", mockRouteCallback());
         registry.register(HttpMethod.GET, "/users/{userId}/orders/{orderId}", mockRouteCallback());
+        registry.register(HttpMethod.GET, "/users/{userId}/orders/{orderId}/comments/12345/replies/560697/dates", mockRouteCallback());
     }
 
-    private static RouteCallback mockRouteCallback() {
-        return new RouteCallback() {};
-    }
-
-    @Test(expected = DuplicateRouteException.class)
-    public void testDuplicateRouteExceptionOnRootNode() {
+    @Test(expected = RouteRegistrationException.class)
+    public void testRouteRegistrationExceptionOnRootNode() {
         registry.register(HttpMethod.GET, "/", mockRouteCallback());
     }
 
-    @Test(expected = DuplicateRouteException.class)
-    public void testDuplicateRouteExceptionOnSegmentNode() {
+    @Test(expected = RouteRegistrationException.class)
+    public void testRouteRegistrationExceptionOnSegmentNode() {
         registry.register(HttpMethod.GET, "/users", mockRouteCallback());
     }
 
-    @Test(expected = DuplicateRouteException.class)
-    public void testDuplicateRouteExceptionOnParameterNode() {
+    @Test(expected = RouteRegistrationException.class)
+    public void testRouteRegistrationExceptionOnParameterNode() {
         registry.register(HttpMethod.GET, "/users/{id}", mockRouteCallback());
     }
 
-    @Test(expected = DuplicateRouteException.class)
-    public void testDuplicateRouteExceptionOnInnerSegmentNode() {
+    @Test(expected = RouteRegistrationException.class)
+    public void testRouteRegistrationExceptionOnInnerSegmentNode() {
         registry.register(HttpMethod.GET, "/users/{id}/orders", mockRouteCallback());
     }
 
-    @Test(expected = DuplicateRouteException.class)
-    public void testDuplicateRouteExceptionOnInnerParameterNode() {
+    @Test(expected = RouteRegistrationException.class)
+    public void testRouteRegistrationExceptionOnInnerParameterNode() {
         registry.register(HttpMethod.GET, "/users/{userId}/orders/{orderId}", mockRouteCallback());
+    }
+
+    @Test(expected = RouteRegistrationException.class)
+    public void testRouteRegistrationExceptionOnDuplicateParameter() {
+        registry.register(HttpMethod.GET, "/users/{id}/friends/{id}", mockRouteCallback());
     }
 
     @Test(expected = RouteNotFoundException.class)
@@ -68,7 +78,7 @@ public class RouteRegistryTest {
 
     @Test(expected = RouteNotFoundException.class)
     public void testRouteNotFoundExceptionOnParameterNode() {
-        registry.find(HttpMethod.PUT, "/users/12345");
+        registry.find(HttpMethod.DELETE, "/users/12345");
     }
 
     @Test(expected = RouteNotFoundException.class)
@@ -81,16 +91,50 @@ public class RouteRegistryTest {
         registry.find(HttpMethod.PUT, "/users/01234/orders/56789");
     }
 
-//        @Test
-//    public void multiplicationOfZeroIntegersShouldReturnZero() {
-//
-////        // MyClass is tested
-////        MyClass tester = new MyClass();
-////
-////        // Tests
-////        assertEquals("10 x 0 must be 0", 0, tester.multiply(10, 0));
-////        assertEquals("0 x 10 must be 0", 0, tester.multiply(0, 10));
-////        assertEquals("0 x 0 must be 0", 0, tester.multiply(0, 0));
-//    }
+    @Test(expected = RouteNotFoundException.class)
+    public void testRouteNotFoundExceptionOnInnerExtraSegment() {
+        registry.find(HttpMethod.GET, "/users/01234/orders/56789/comments");
+    }
 
+    @Test
+    public void testFindRouteOnRootNode() {
+        registry.find(HttpMethod.GET, "/");
+    }
+
+    @Test
+    public void testFindRouteOnSegmentNode() {
+        registry.find(HttpMethod.GET, "/users");
+    }
+
+    @Test
+    public void testFindRouteOnParameterNode() {
+        registry.find(HttpMethod.GET, "/users/12345");
+    }
+
+    @Test
+    public void testFindRouteOnInnerSegmentNode() {
+        registry.find(HttpMethod.GET, "/users/12345/orders");
+    }
+
+    @Test
+    public void testFindRouteOnInnerParameterNode() {
+        registry.find(HttpMethod.GET, "/users/12345/orders/67890");
+    }
+
+    @Test
+    public void testFindLongPathMatchRepeatedTiming() {
+        long average = 0;
+        for (int i = 0; i < 100; i++) {
+            long start = System.nanoTime();
+            registry.find(HttpMethod.GET, "/users/{userId}/orders/{orderId}/comments/12345/replies/560697/dates");
+            long time = (System.nanoTime() - start) / 1000;
+
+            if (i == 0) {
+                average = time;
+            } else {
+                average = (average + time) / 2;
+            }
+        }
+        log.debug(String.format("Average route match time on 1000 repetition: %dµs", average));
+    }
 }
