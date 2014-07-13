@@ -7,7 +7,7 @@
 		</encoder>
 	</appender>
 
-	<logger name="restelio" level="DEBUG" />
+	<logger name="restelio" level="TRACE" />
 
 	<root level="info">
 		<appender-ref ref="console" />
