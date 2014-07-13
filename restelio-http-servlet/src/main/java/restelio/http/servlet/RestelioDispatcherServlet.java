@@ -1,7 +1,11 @@
 package restelio.http.servlet;
 
-import restelio.http.HttpStatus;
-import restelio.router.RestelioRouter;
+import restelio.Restelio;
+import restelio.Restelio.HttpMethod;
+import restelio.Restelio.HttpStatus;
+import restelio.http.servlet.support.HttpServletRequestWrapper;
+import restelio.http.servlet.support.HttpServletResponseWrapper;
+import restelio.router.RouteHandler;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -12,32 +16,45 @@ import java.io.IOException;
 
 public class RestelioDispatcherServlet extends HttpServlet {
 
-    private RestelioRouter router;
+    private Restelio restelio;
+    private RouteHandler routeHandler;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-        router = RestelioRouter.configure();
+        this.restelio = Restelio.bootstrap();
+        this.routeHandler = restelio.getRouteHandler();
+    }
+
+    private void handleRoute(HttpMethod method, HttpServletRequest request, HttpServletResponse response) {
+        routeHandler.handle(
+                new HttpServletRequestWrapper(request),
+                new HttpServletResponseWrapper(response));
     }
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse resp) throws ServletException, IOException {
-        super.doGet(request, resp);
+    protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        super.service(req, resp);
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse resp) throws ServletException, IOException {
-        super.doPost(request, resp);
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        handleRoute(HttpMethod.GET, request, response);
     }
 
     @Override
-    protected void doPut(HttpServletRequest request, HttpServletResponse resp) throws ServletException, IOException {
-        super.doPut(request, resp);
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        handleRoute(HttpMethod.POST, request, response);
     }
 
     @Override
-    protected void doDelete(HttpServletRequest request, HttpServletResponse resp) throws ServletException, IOException {
-        super.doDelete(request, resp);
+    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        handleRoute(HttpMethod.PUT, request, response);
+    }
+
+    @Override
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        handleRoute(HttpMethod.DELETE, request, response);
     }
 
     @Override
