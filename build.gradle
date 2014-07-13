@@ -1,14 +1,12 @@
-//buildscript {
-//    repositories {
-//        mavenLocal()
-//        mavenCentral()
-//        jcenter()
-//    }
-////
-////    dependencies {
-////        classpath "net.saliman:gradle-cobertura-plugin:+"
-////    }
-//}
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath "net.saliman:gradle-cobertura-plugin:+"
+    }
+}
 
 ext {
     guavaVersion    = "17.0"
@@ -45,7 +43,6 @@ allprojects {
     apply plugin: 'eclipse'
     apply plugin: 'idea'
     apply plugin: 'java'
-    apply plugin: "jacoco"
 
     // Java Compiler
     compileJava {
@@ -56,6 +53,9 @@ allprojects {
 
 // Framework projects configuration
 configure(project.frameworkProjects) {
+    apply plugin: "cobertura"
+    apply plugin: "jacoco"
+
     dependencies {
         compile "org.slf4j:slf4j-api:${slf4jVersion}",
                 "org.slf4j:jcl-over-slf4j:${slf4jVersion}"
@@ -63,6 +63,10 @@ configure(project.frameworkProjects) {
         testCompile "junit:junit:${junitVersion}",
                 "ch.qos.logback:logback-core:${logbackVersion}",
                 "ch.qos.logback:logback-classic:${logbackVersion}"
+    }
+
+    jar {
+        manifest.attributes provider: 'Ubiqueworks Ltd'
     }
 
     jacoco {
@@ -74,6 +78,17 @@ configure(project.frameworkProjects) {
             xml.enabled true
             csv.enabled false
             html.enabled true
+        }
+    }
+
+    cobertura {
+        coverageFormats = ['html', 'xml']
+
+        coverageExcludes = ['.*restelio.*Exception']
+        coverageIgnoreTrivial = true
+
+        rootProject.subprojects.each {
+            coverageDirs << file("${it.name}/build/classes/main")
         }
     }
 }
