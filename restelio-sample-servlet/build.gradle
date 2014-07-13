@@ -1,3 +1,4 @@
+apply plugin: "jetty"
 apply plugin: "war"
 
 dependencies {
@@ -9,4 +10,9 @@ dependencies {
 
 war {
     archiveName "${project.name}.war"
+}
+
+task jettyDebug(dependsOn: 'classes', type: JavaExec) {
+    jvmArgs = ["-Xdebug", "-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=8000"]
+    tasks.jettyRun.execute()
 }
