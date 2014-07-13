@@ -42,6 +42,7 @@ public abstract class LifecycleEventListener {
                 if (log.isDebugEnabled()) {
                     log.debug(String.format("Request completed in %s", stopwatch.get().toString()));
                 }
+                stopwatch.remove();
                 break;
 
             case LifecycleEvent.CONTEXT_CREATED:

@@ -1,9 +1,6 @@
 package restelio.annotation;
 
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Inherited;
-import java.lang.annotation.Target;
+import java.lang.annotation.*;
 
 /**
  * Annotation to mark a REST resource
@@ -11,6 +8,7 @@ import java.lang.annotation.Target;
  */
 @Documented
 @Inherited
+@Retention(RetentionPolicy.SOURCE)
 @Target(ElementType.TYPE)
 public @interface RestelioResource {
 
