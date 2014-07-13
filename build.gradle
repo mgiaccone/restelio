@@ -10,13 +10,14 @@ buildscript {
 }
 
 ext {
-    guavaVersion    = "17.0"
-    jacocoVersion   = "0.7.1.201405082137"
-    logbackVersion  = "1.1.2"
-    jacksonVersion  = "2.4.1.1"
-    junitVersion    = "4.11"
-    servletVersion  = "2.5"
-    slf4jVersion    = "1.7.7"
+    guavaVersion            = "17.0"
+    jacocoVersion           = "0.7.1.201405082137"
+    logbackVersion          = "1.1.2"
+    jacksonVersion          = "2.4.1.1"
+    junitVersion            = "4.11"
+    servletVersion          = "2.5"
+    slf4jVersion            = "1.7.7"
+    stringTemplateVersion   = "4.0.2"
 
     frameworkProjects = subprojects.findAll {
         it.name == 'restelio-admin-gui' ||

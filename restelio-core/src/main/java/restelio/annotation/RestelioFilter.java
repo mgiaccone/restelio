@@ -10,7 +10,7 @@ import java.lang.annotation.*;
  */
 @Documented
 @Inherited
-@Retention(RetentionPolicy.SOURCE)
+@Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 public @interface RestelioFilter {
     public static enum Priority {

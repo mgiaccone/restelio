@@ -1,4 +1,6 @@
 dependencies {
     compile "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}",
-            "com.google.guava:guava:${guavaVersion}"
+            "com.google.guava:guava:${guavaVersion}",
+            "org.antlr:stringtemplate:${stringTemplateVersion}"
+
 }
