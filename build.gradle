@@ -5,6 +5,7 @@ buildscript {
 
     dependencies {
         classpath "net.saliman:gradle-cobertura-plugin:+"
+        classpath "com.google.guava:guava:17.0"
     }
 }
 
