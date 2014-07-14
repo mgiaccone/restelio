@@ -2,9 +2,13 @@
 
 ### Initial work in progress, come back soon!
 
-## Restelio [[Sample]]
+## Restelio
 
-Welcome to your wiki! This is the default page we've installed for your convenience. Go ahead and edit it.
+Restelio is a fast and lightweight REST framework for Java. 
+
+<!--
+I know you're thinking "Oh dear... another one!", well.. YES! The development started 
+-->
 
 ## Documentation
 
