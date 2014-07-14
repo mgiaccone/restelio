@@ -191,7 +191,7 @@ public class RouteRegistry {
     }
 
     /**
-     * Route information
+     * Route metadata
      */
     public static class RouteInfo {
 

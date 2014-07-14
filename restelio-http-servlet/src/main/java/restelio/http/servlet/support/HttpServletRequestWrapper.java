@@ -41,8 +41,22 @@ public class HttpServletRequestWrapper extends RestelioRequest {
     }
 
     @Override
-    public String printRequest(boolean includeQuery) {
+    public Optional<String> getQueryString() {
         return null;
     }
 
+    @Override
+    public Optional<String> getBasePath() {
+        return null;
+    }
+
+    @Override
+    public Optional<String> getRelativePath() {
+        return null;
+    }
+
+    @Override
+    public Optional<String> getPath() {
+        return null;
+    }
 }

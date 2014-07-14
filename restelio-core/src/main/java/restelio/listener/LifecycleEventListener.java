@@ -24,7 +24,11 @@ public abstract class LifecycleEventListener {
         // Default empty implementation
     }
 
-    public void onContextCreated() {
+    public void onHandlerReady() {
+        // Default empty implementation
+    }
+
+    public void onHandlerCleanup() {
         // Default empty implementation
     }
 
@@ -45,8 +49,12 @@ public abstract class LifecycleEventListener {
                 stopwatch.remove();
                 break;
 
-            case LifecycleEvent.CONTEXT_CREATED:
-                onContextCreated();
+            case LifecycleEvent.HANDLER_READY:
+                onHandlerReady();
+                break;
+
+            case LifecycleEvent.HANDLER_CLEANUP:
+                onHandlerCleanup();
                 break;
 
             default:

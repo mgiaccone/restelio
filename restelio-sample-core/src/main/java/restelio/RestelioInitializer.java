@@ -4,10 +4,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import restelio.Restelio.HttpMethod;
 import restelio.router.RouteRegistry.RouteCallback;
+import restelio.filter.SecurityFilter;
 
 public class RestelioInitializer {
 
     static final Logger log = LoggerFactory.getLogger(RestelioInitializer.class);
+
+    private static final String PATTERN_MATCH_ALL = "/*";
 
     private Restelio restelio;
 
@@ -16,12 +19,16 @@ public class RestelioInitializer {
     }
 
     public void initialize() {
-        log.info("Restelio initializer started");
+        log.info("Initializing default components...");
+        initializeDefaultComponents();
 
         log.info("Initializing routes...");
         initializeRouteRegistry();
 
-        log.info("Initialization done!");
+    }
+
+    private void initializeDefaultComponents() {
+        restelio.registerFilter(PATTERN_MATCH_ALL, -1000, new SecurityFilter());
     }
 
     private void initializeRouteRegistry() {

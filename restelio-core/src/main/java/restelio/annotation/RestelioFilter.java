@@ -14,7 +14,7 @@ import java.lang.annotation.*;
 @Target(ElementType.TYPE)
 public @interface RestelioFilter {
     public static enum Priority {
-        VERY_HIGH, HIGH, DEFAULT, LOW, VERY_LOW
+        TOP, HIGH, DEFAULT, LOW
     }
 
     String value();

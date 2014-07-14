@@ -3,6 +3,7 @@ package restelio;
 import com.google.common.base.Stopwatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import restelio.router.RouteFilter;
 import restelio.router.RouteHandler;
 import restelio.router.RouteRegistry.RouteCallback;
 
@@ -75,10 +76,31 @@ public class Restelio {
         }
     }
 
+    /**
+     * @see restelio.router.RouteHandler#registerRoute(restelio.Restelio.HttpMethod, String, restelio.router.RouteRegistry.RouteCallback)
+     */
     public static void registerRoute(HttpMethod method, String path, RouteCallback callback) {
         get().getRouteHandler().registerRoute(method, path, callback);
     }
 
+    /**
+     * @see restelio.router.RouteHandler#registerFilter(String, int, restelio.router.RouteFilter)
+     */
+    public static void registerFilter(String pattern, int order, RouteFilter instance) {
+        registerFilter(null, pattern, order, instance);
+    }
+
+    /**
+     * @see restelio.router.RouteHandler#registerFilter(restelio.Restelio.HttpMethod[], String, int, restelio.router.RouteFilter)
+     */
+    public static void registerFilter(HttpMethod[] methods, String pattern, int order, RouteFilter instance) {
+        get().getRouteHandler().registerFilter(methods, pattern, order, instance);
+    }
+
+    /**
+     * Convenience method to get the current route handler
+     * @return RouteHandler instance
+     */
     public RouteHandler getRouteHandler() {
         return routeHandler;
     }
@@ -139,8 +161,8 @@ public class Restelio {
         REQUESTED_RANGE_NOT_SATISFIABLE (416, "Requested Range Not Satisfiable"),
         EXPECTATION_FAILED              (417, "Expectation Failed"),
         //    UNPROCESSABLE_ENTITY            (422, "Unprocessable Entity"),
-//    LOCKED                          (423, "Locked"),
-//    FAILED_DEPENDENCY               (424, "Failed Dependency"),
+        //    LOCKED                          (423, "Locked"),
+        //    FAILED_DEPENDENCY               (424, "Failed Dependency"),
         UPGRADE_REQUIRED                (426, "Upgrade Required"),
         PRECONDITION_REQUIRED           (428, "Precondition Required"),
         TOO_MANY_REQUESTS               (429, "Too Many Requests"),
@@ -153,7 +175,7 @@ public class Restelio {
         SERVICE_UNAVAILABLE             (503, "Service Unavailable"),
         GATEWAY_TIMEOUT                 (504, "Gateway Timeout"),
         HTTP_VERSION_NOT_SUPPORTED      (505, "HTTP Version Not Supported");
-//    INSUFFICIENT_STORAGE            (507, "Insufficient Storage");
+        //    INSUFFICIENT_STORAGE            (507, "Insufficient Storage");
 
         private final int code;
         private final String message;
