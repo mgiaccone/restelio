@@ -79,8 +79,8 @@ public class Restelio {
     /**
      * @see restelio.router.RouteHandler#registerRoute(restelio.Restelio.HttpMethod, String, restelio.router.RouteRegistry.RouteCallback)
      */
-    public static void registerRoute(HttpMethod method, String path, RouteCallback callback) {
-        get().getRouteHandler().registerRoute(method, path, callback);
+    public static void registerRoute(HttpMethod method, String path, Object instance, RouteCallback callback) {
+        get().getRouteHandler().registerRoute(method, path, instance, callback);
     }
 
     /**

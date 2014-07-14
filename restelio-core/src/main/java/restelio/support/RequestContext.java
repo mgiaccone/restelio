@@ -1,11 +1,13 @@
 package restelio.support;
 
-public class RestelioContext {
+import restelio.Restelio.HttpStatus;
+
+public class RequestContext {
 
     private final RestelioRequest request;
     private final RestelioResponse response;
 
-    public RestelioContext(RestelioRequest request, RestelioResponse response) {
+    public RequestContext(RestelioRequest request, RestelioResponse response) {
         this.request = request;
         this.response = response;
     }
@@ -16,6 +18,14 @@ public class RestelioContext {
 
     public RestelioResponse getResponse() {
         return response;
+    }
+
+    public void sendError(HttpStatus status) {
+        response.sendError(status);
+    }
+
+    public String getPath() {
+        return request.getPath();
     }
 
 }

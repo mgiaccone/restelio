@@ -1,12 +1,16 @@
-apply plugin: 'java'
-
-sourceCompatibility = 1.5
-version = '1.0'
-
-repositories {
-    mavenCentral()
-}
+apply plugin: "jetty"
+apply plugin: "war"
 
 dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.11'
+    compile project(":restelio-http-servlet")
+
+    providedCompile "javax.servlet:servlet-api:${servletVersion}"
+}
+
+jettyRun {
+    contextPath = "/api"
+}
+
+war {
+    archiveName "${project.name}.war"
 }

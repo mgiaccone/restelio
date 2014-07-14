@@ -1,38 +1,44 @@
 package restelio.http.servlet.support;
 
 import com.google.common.base.Optional;
+import restelio.Restelio.HttpMethod;
 import restelio.support.RestelioRequest;
+import restelio.support.Url;
 
 import javax.servlet.http.HttpServletRequest;
 
-public class HttpServletRequestWrapper extends RestelioRequest {
+/**
+ * A wrapper for an HTTPServletRequest
+ */
+public class HttpServletRequestWrapper extends RestelioRequest<HttpServletRequest> {
 
     private HttpServletRequest request;
 
     public HttpServletRequestWrapper(HttpServletRequest request) {
+        super(request);
         this.request = request;
     }
 
     @Override
-    public String getScheme() {
-        return request.getScheme();
+    protected Url convertToUrl(HttpServletRequest request) {
+        return Url.builder(request.getRequestURL().toString())
+                .queryString(Optional.fromNullable(request.getQueryString()))
+                .build();
     }
 
     @Override
-    public String getHostname() {
-        // FIXME: Handle X-Forwarded-For header
-        return request.getServerName();
-    }
-
-    @Override
-    public int getPort() {
-        return request.getServerPort();
-    }
-
-    @Override
-    public Optional<String> getParameter(String name) {
-        // FIXME: Process body params as well if the request is x-www-formencoded
-        return Optional.fromNullable(request.getParameter(name));
+    protected HttpMethod extractHttpMethod() {
+        String method = request.getMethod();
+        if (HttpMethod.GET.name().equals(method)) {
+            return HttpMethod.GET;
+        } else if (HttpMethod.POST.name().equals(method)) {
+            return HttpMethod.POST;
+        } else if (HttpMethod.PUT.name().equals(method)) {
+            return HttpMethod.PUT;
+        } else if (HttpMethod.DELETE.name().equals(method)) {
+            return HttpMethod.DELETE;
+        }
+        return null;
     }
 
     @Override
@@ -42,21 +48,17 @@ public class HttpServletRequestWrapper extends RestelioRequest {
 
     @Override
     public Optional<String> getQueryString() {
-        return null;
+        return Optional.fromNullable(request.getQueryString());
     }
 
     @Override
     public Optional<String> getBasePath() {
-        return null;
+        return Optional.fromNullable(request.getServletPath());
     }
 
     @Override
     public Optional<String> getRelativePath() {
-        return null;
+        return Optional.fromNullable(request.getContextPath());
     }
 
-    @Override
-    public Optional<String> getPath() {
-        return null;
-    }
 }

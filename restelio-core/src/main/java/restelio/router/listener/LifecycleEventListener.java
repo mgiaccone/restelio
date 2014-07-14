@@ -1,6 +1,7 @@
-package restelio.listener;
+package restelio.router.listener;
 
 import com.google.common.base.Stopwatch;
+import com.google.common.eventbus.AllowConcurrentEvents;
 import com.google.common.eventbus.Subscribe;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,45 +17,46 @@ public abstract class LifecycleEventListener {
 
     static final ThreadLocal<Stopwatch> stopwatch = new ThreadLocal<Stopwatch>();
 
-    public void onRequestStarted() {
+    public void onRequestStarted(final String path) {
         // Default empty implementation
     }
 
-    public void onRequestCompleted() {
+    public void onRequestCompleted(final String path) {
         // Default empty implementation
     }
 
-    public void onHandlerReady() {
+    public void onHandlerReady(final String path) {
         // Default empty implementation
     }
 
-    public void onHandlerCleanup() {
+    public void onHandlerCleanup(final String path) {
         // Default empty implementation
     }
 
     @Subscribe
+    @AllowConcurrentEvents
     public final void handle(LifecycleEvent event) {
         switch (event.getEventId()) {
             case LifecycleEvent.REQUEST_STARTED:
                 stopwatch.set(Stopwatch.createStarted());
-                onRequestStarted();
+                onRequestStarted(event.getPath());
                 break;
 
             case LifecycleEvent.REQUEST_COMPLETED:
-                onRequestCompleted();
+                onRequestCompleted(event.getPath());
                 stopwatch.get().stop();
                 if (log.isDebugEnabled()) {
-                    log.debug(String.format("Request completed in %s", stopwatch.get().toString()));
+                    log.debug(String.format("Request handling completed in %s", stopwatch.get().toString()));
                 }
                 stopwatch.remove();
                 break;
 
             case LifecycleEvent.HANDLER_READY:
-                onHandlerReady();
+                onHandlerReady(event.getPath());
                 break;
 
             case LifecycleEvent.HANDLER_CLEANUP:
-                onHandlerCleanup();
+                onHandlerCleanup(event.getPath());
                 break;
 
             default:

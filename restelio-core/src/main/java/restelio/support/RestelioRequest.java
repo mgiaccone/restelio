@@ -1,32 +1,30 @@
 package restelio.support;
 
 import com.google.common.base.Optional;
+import restelio.Restelio.HttpMethod;
+
+import static com.google.common.base.Preconditions.*;
 
 /**
  * The request as seen by the framework
  */
-public abstract class RestelioRequest {
+public abstract class RestelioRequest<T> {
+
+    private HttpMethod method;
+    private Url url;
+
+    protected RestelioRequest(T source) {
+        this.url = convertToUrl(source);
+    }
 
     /**
-     * @return The request's scheme
+     *
+     * @param source Source of request details
+     * @return A wrappet Url
      */
-    public abstract String getScheme();
+    protected abstract Url convertToUrl(T source);
 
-    /**
-     * @return The request's hostname
-     */
-    public abstract String getHostname();
-
-    /**
-     * @return The request's port
-     */
-    public abstract int getPort();
-
-    /**
-     * @param name Name of the parameter
-     * @return An optional value for the specified parameter
-     */
-    public abstract Optional<String> getParameter(String name);
+    protected abstract HttpMethod extractHttpMethod();
 
     /**
      * @param name Name of the header
@@ -54,10 +52,65 @@ public abstract class RestelioRequest {
     public abstract Optional<String> getRelativePath();
 
     /**
+     * @param name Name of the parameter
+     * @return An optional value for the specified parameter
+     */
+    public Optional<String> getParameter(String name) {
+        return url.getParameter(name);
+    }
+
+    /**
+     * Get the request method
+     * @return The framework compatible request method
+     */
+    public HttpMethod getMethod() {
+        if (method == null) {
+            this.method = extractHttpMethod();
+            checkNotNull(this.method);
+        }
+        return method;
+    }
+
+    /**
+     * @return The request's scheme
+     */
+    public String getScheme() {
+        return url.getProtocol();
+    }
+
+    /**
+     * @return The request's hostname
+     */
+    public String getHostname() {
+        return url.getHost();
+    }
+
+    /**
+     * @return The request's port
+     */
+    public int getPort() {
+        return url.getPort();
+    }
+
+    /**
+     * Get the Url abstraction wrapper instance
+     * @return
+     */
+    public Url getUrl() {
+        return url;
+    }
+
+    protected void setUrl(Url url) {
+        this.url = url;
+    }
+
+    /**
      * Return the full path of the request built by the concatenation of the base path and the relative path
      * @return the full path
      */
-    public abstract Optional<String> getPath();
+    public String getPath() {
+        return url.getPath();
+    }
 
     /**
      * Convenience method to log
@@ -65,8 +118,8 @@ public abstract class RestelioRequest {
      * @return the base path
      */
     public String printRequest() {
+        // TODO: Implement debug request log
         return null;
     }
-
 
 }

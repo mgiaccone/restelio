@@ -8,6 +8,9 @@ import com.google.common.collect.Sets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import restelio.Restelio.HttpMethod;
+import restelio.router.exception.RestException;
+import restelio.router.exception.RouteRegistrationException;
+import restelio.support.RequestContext;
 
 import java.util.EnumMap;
 import java.util.LinkedList;
@@ -41,8 +44,8 @@ public class RouteRegistry {
      * @param callback the route callback
      * @return A route information object
      */
-    public RouteInfo register(HttpMethod method, String path, RouteCallback callback) {
-        RouteInfo routeInfo = new RouteInfo(method, path, callback);
+    public RouteInfo register(HttpMethod method, String path, Object instance, RouteCallback callback) {
+        RouteInfo routeInfo = new RouteInfo(method, path, instance, callback);
         if (isPathValid(path)) {
             RouteInfo result = registerInternal(rootNode, splitPath(path), routeInfo);
             if (log.isInfoEnabled()) {
@@ -73,26 +76,18 @@ public class RouteRegistry {
      * @param path the route path
      * @return A route match if the route was found, throws and exception if the route is not available
      */
-    public RouteMatchResult find(HttpMethod method, String path) {
-        Optional<RouteMatchResult> result = findInternal(rootNode, method, splitPath(path));
-        if (result.isPresent()) {
-            if (log.isTraceEnabled()) {
-                log.trace(String.format("Match %s", result.get().toString()));
-            }
-            return result.get();
-        } else {
-            throw new RouteNotFoundException(path);
-        }
+    public Optional<RouteMatch> find(HttpMethod method, String path) {
+        return findInternal(rootNode, method, splitPath(path));
     }
 
-    public Optional<RouteMatchResult> findInternal(RouteNode parentNode, HttpMethod method, LinkedList<String> path) {
+    public Optional<RouteMatch> findInternal(RouteNode parentNode, HttpMethod method, LinkedList<String> path) {
         if (path.size() > 0) {
             String segment = path.pop();
 
             // Look for segment nodes first
             Optional<RouteNode> child = parentNode.findNode(segment);
             if (child.isPresent()) {
-                Optional<RouteMatchResult> result = findInternal(child.get(), method, path);
+                Optional<RouteMatch> result = findInternal(child.get(), method, path);
                 if (result.isPresent()) {
                     RouteNode node = child.get();
                     if (node.isParameter()) {
@@ -104,7 +99,7 @@ public class RouteRegistry {
         } else {
             Optional<RouteInfo> routeInfo = parentNode.getRouteInfo(method);
             if (routeInfo.isPresent()) {
-                return Optional.of(new RouteMatchResult(routeInfo));
+                return Optional.of(new RouteMatch(routeInfo));
             }
         }
         return Optional.absent();
@@ -143,18 +138,18 @@ public class RouteRegistry {
      * Route callback interface
      */
     public static interface RouteCallback {
-
+        void execute(Object instance, RequestContext context) throws RestException;
     }
 
     /**
      * Route callback interface
      */
-    public static class RouteMatchResult {
+    public static class RouteMatch {
 
         private Optional<RouteInfo> routeInfo;
         private Map<String, String> pathParameters;
 
-        private RouteMatchResult(Optional<RouteInfo> routeInfo) {
+        private RouteMatch(Optional<RouteInfo> routeInfo) {
             this.routeInfo = routeInfo;
             this.pathParameters = Maps.newHashMap();
         }
@@ -197,11 +192,13 @@ public class RouteRegistry {
 
         private HttpMethod method;
         private String path;
+        private Object instance;
         private RouteCallback callback;
 
-        public RouteInfo(HttpMethod method, String path, RouteCallback callback) {
+        public RouteInfo(HttpMethod method, String path, Object instance, RouteCallback callback) {
             this.method = method;
             this.path = path;
+            this.instance = instance;
             this.callback = callback;
         }
 
@@ -213,8 +210,12 @@ public class RouteRegistry {
             return path;
         }
 
-        public RouteCallback getCallback() {
-            return callback;
+        public Object getInstance() {
+            return instance;
+        }
+
+        public Optional<RouteCallback> getCallback() {
+            return Optional.fromNullable(callback);
         }
 
         @Override

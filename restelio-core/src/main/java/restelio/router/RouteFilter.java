@@ -1,11 +1,10 @@
 package restelio.router;
 
-import restelio.support.RestelioContext;
-import restelio.support.RestelioRequest;
-import restelio.support.RestelioResponse;
+import restelio.router.exception.RestException;
+import restelio.support.RequestContext;
 
 public interface RouteFilter {
 
-    void apply(RestelioRequest request, RestelioResponse response, RestelioContext context, RouteFilterChain chain);
+    void apply(RequestContext context, RouteFilterChain chain) throws RestException;
 
 }

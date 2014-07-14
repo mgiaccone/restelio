@@ -21,6 +21,8 @@ public class Url {
     private static final int DEFAULT_HTTP_PORT  = 80;
     private static final int DEFAULT_HTTPS_PORT = 443;
 
+    private static final String DEFAULT_PATH    = "/";
+
     public static Builder builder() {
         return new Builder();
     }
@@ -41,14 +43,14 @@ public class Url {
         return new Builder().protocol(protocol)
                 .host(host)
                 .port(port)
-                .path(Optional.fromNullable(path))
+                .path(path)
                 .queryString(Optional.fromNullable(queryString));
     }
 
     private boolean queryAsFragment;
     private String protocol;
     private String host;
-    private Optional<String> path;
+    private String path;
     private Optional<String> fragment;
     private Map<String, String> queryParams;
     private int port = DEFAULT_HTTP_PORT;
@@ -65,7 +67,7 @@ public class Url {
         this.protocol = protocol;
         this.host = host;
         this.port = (port > 0 && port != DEFAULT_HTTP_PORT && port != DEFAULT_HTTPS_PORT) ? port : 0;
-        this.path = Optional.fromNullable(path);
+        this.path = path;
     }
 
     private Url() {
@@ -88,11 +90,11 @@ public class Url {
         this.host = host;
     }
 
-    public Optional<String> getPath() {
+    public String getPath() {
         return path;
     }
 
-    private void setPath(Optional<String> path) {
+    private void setPath(String path) {
         this.path = path;
     }
 
@@ -169,8 +171,8 @@ public class Url {
             sb.append(port);
         }
 
-        if (path.isPresent() && path.get().trim().length() > 0) {
-            sb.append(path.get());
+        if (path != null && path.trim().length() > 0) {
+            sb.append(path);
         }
 
         String queryString = getQueryString();
@@ -196,7 +198,7 @@ public class Url {
         /*
          * REGEX_URL:
          *
-         * ^(http[s]?|ftp)(?::\/\/)([^:\/\s#\?$]+)(?::([0-9]+))?(?:\/|(\/[^\?#\s]+))?(?:\?([^#\s]+))?(?:#([^\s]+))?$
+         * ^(http[s]?)(?::\/\/)([^:\/\s#\?$]+)(?:\:([0-9]+))?(\/[^\?#\s]*)?(?:\?([^#\s]+))?(?:#([^\s]+))?$
          *
          * group 1 -> schema
          * group 2 -> host
@@ -217,9 +219,10 @@ public class Url {
          * https://www.example.com/?p1=1&p2=2
          * https://www.example.com/#fragment
          * https://www.example.com/
+         * http://www.example.com:8080/
          */
         private static final Pattern REGEX_URL   = Pattern.compile(
-                "^(http[s]?)(?::\\/\\/)([^:\\/\\s#\\?$]+)(?::([0-9]+))?(\\/[^\\?#\\s]+)?(?:\\?([^#\\s]+))?(?:#([^\\s]+))?$",
+                "^(http[s]?)(?:://)([^:/\\s#\\?$]+)(?::([0-9]+))?(/[^\\?#\\s]*)?(?:\\?([^#\\s]+))?(?:#([^\\s]+))?$",
                 Pattern.DOTALL | Pattern.MULTILINE);
 
         private static final Pattern REGEX_QUERY = Pattern.compile("(?:\\&|\\?)?(?:([^\\=\\&#]+)\\=([^\\=\\&#]+))");
@@ -275,8 +278,8 @@ public class Url {
             return this;
         }
 
-        public Builder path(Optional<String> path) {
-            url.setPath(path);
+        public Builder path(String path) {
+            url.setPath(Optional.fromNullable(path).or(DEFAULT_PATH));
             return this;
         }
 

@@ -1,11 +1,18 @@
 package restelio.router;
 
+import com.google.common.base.Optional;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import restelio.Restelio.HttpMethod;
 import restelio.router.RouteRegistry.RouteCallback;
+import restelio.router.RouteRegistry.RouteMatch;
+import restelio.router.exception.RestException;
+import restelio.router.exception.RouteRegistrationException;
+import restelio.support.RequestContext;
+
+import static org.junit.Assert.*;
 
 public class RouteRegistryTest {
 
@@ -14,7 +21,16 @@ public class RouteRegistryTest {
     private static RouteRegistry registry;
 
     private static RouteCallback mockRouteCallback() {
-        return new RouteCallback() {};
+        return new RouteCallback() {
+            @Override
+            public void execute(Object instance, RequestContext context) throws RestException {
+
+            }
+        };
+    }
+
+    private static Object mockResourceInstance() {
+        return new Object();
     }
 
     @BeforeClass
@@ -22,75 +38,81 @@ public class RouteRegistryTest {
         registry = new RouteRegistry();
 
         // Initialize test routes
-        registry.register(HttpMethod.GET, "/", mockRouteCallback());
-        registry.register(HttpMethod.POST, "/", mockRouteCallback());
-        registry.register(HttpMethod.GET, "/users", mockRouteCallback());
-        registry.register(HttpMethod.GET, "/users/{id}", mockRouteCallback());
-        registry.register(HttpMethod.POST, "/users/{id}", mockRouteCallback());
-        registry.register(HttpMethod.PUT, "/users/{id}", mockRouteCallback());
-        registry.register(HttpMethod.GET, "/users/{id}/orders", mockRouteCallback());
-        registry.register(HttpMethod.GET, "/users/{userId}/orders/{orderId}", mockRouteCallback());
-        registry.register(HttpMethod.GET, "/users/{userId}/orders/{orderId}/comments/12345/replies/560697/dates", mockRouteCallback());
+        registry.register(HttpMethod.GET, "/", mockResourceInstance(), mockRouteCallback());
+        registry.register(HttpMethod.POST, "/", mockResourceInstance(), mockRouteCallback());
+        registry.register(HttpMethod.GET, "/users", mockResourceInstance(), mockRouteCallback());
+        registry.register(HttpMethod.GET, "/users/{id}", mockResourceInstance(), mockRouteCallback());
+        registry.register(HttpMethod.POST, "/users/{id}", mockResourceInstance(), mockRouteCallback());
+        registry.register(HttpMethod.PUT, "/users/{id}", mockResourceInstance(), mockRouteCallback());
+        registry.register(HttpMethod.GET, "/users/{id}/orders", mockResourceInstance(), mockRouteCallback());
+        registry.register(HttpMethod.GET, "/users/{userId}/orders/{orderId}", mockResourceInstance(), mockRouteCallback());
+        registry.register(HttpMethod.GET, "/users/{userId}/orders/{orderId}/comments/12345/replies/560697/dates", mockResourceInstance(), mockRouteCallback());
     }
 
     @Test(expected = RouteRegistrationException.class)
     public void testRouteRegistrationExceptionOnRootNode() {
-        registry.register(HttpMethod.GET, "/", mockRouteCallback());
+        registry.register(HttpMethod.GET, "/", mockResourceInstance(), mockRouteCallback());
     }
 
     @Test(expected = RouteRegistrationException.class)
     public void testRouteRegistrationExceptionOnSegmentNode() {
-        registry.register(HttpMethod.GET, "/users", mockRouteCallback());
+        registry.register(HttpMethod.GET, "/users", mockResourceInstance(), mockRouteCallback());
     }
 
     @Test(expected = RouteRegistrationException.class)
     public void testRouteRegistrationExceptionOnParameterNode() {
-        registry.register(HttpMethod.GET, "/users/{id}", mockRouteCallback());
+        registry.register(HttpMethod.GET, "/users/{id}", mockResourceInstance(), mockRouteCallback());
     }
 
     @Test(expected = RouteRegistrationException.class)
     public void testRouteRegistrationExceptionOnInnerSegmentNode() {
-        registry.register(HttpMethod.GET, "/users/{id}/orders", mockRouteCallback());
+        registry.register(HttpMethod.GET, "/users/{id}/orders", mockResourceInstance(), mockRouteCallback());
     }
 
     @Test(expected = RouteRegistrationException.class)
     public void testRouteRegistrationExceptionOnInnerParameterNode() {
-        registry.register(HttpMethod.GET, "/users/{userId}/orders/{orderId}", mockRouteCallback());
+        registry.register(HttpMethod.GET, "/users/{userId}/orders/{orderId}", mockResourceInstance(), mockRouteCallback());
     }
 
     @Test(expected = RouteRegistrationException.class)
     public void testRouteRegistrationExceptionOnDuplicateParameter() {
-        registry.register(HttpMethod.GET, "/users/{id}/friends/{id}", mockRouteCallback());
+        registry.register(HttpMethod.GET, "/users/{id}/friends/{id}", mockResourceInstance(), mockRouteCallback());
     }
 
-    @Test(expected = RouteNotFoundException.class)
+    @Test
     public void testRouteNotFoundExceptionOnRootNode() {
-        registry.find(HttpMethod.PUT, "/");
+        Optional<RouteMatch> match = registry.find(HttpMethod.PUT, "/");
+        assertFalse(match.isPresent());
     }
 
-    @Test(expected = RouteNotFoundException.class)
+    @Test
     public void testRouteNotFoundExceptionOnSegmentNode() {
-        registry.find(HttpMethod.PUT, "/users");
+        Optional<RouteMatch> match = registry.find(HttpMethod.PUT, "/users");
+        assertFalse(match.isPresent());
     }
 
-    @Test(expected = RouteNotFoundException.class)
+    @Test
     public void testRouteNotFoundExceptionOnParameterNode() {
-        registry.find(HttpMethod.DELETE, "/users/12345");
+        Optional<RouteMatch> match = registry.find(HttpMethod.DELETE, "/users/12345");
+        assertFalse(match.isPresent());
     }
 
-    @Test(expected = RouteNotFoundException.class)
+    @Test
     public void testRouteNotFoundExceptionOnInnerSegmentNode() {
-        registry.find(HttpMethod.PUT, "/users/01234/orders");
+        Optional<RouteMatch> match = registry.find(HttpMethod.PUT, "/users/01234/orders");
+        assertFalse(match.isPresent());
     }
 
-    @Test(expected = RouteNotFoundException.class)
+    @Test
     public void testRouteNotFoundExceptionOnInnerParameterNode() {
-        registry.find(HttpMethod.PUT, "/users/01234/orders/56789");
+        Optional<RouteMatch> match = registry.find(HttpMethod.PUT, "/users/01234/orders/56789");
+        assertFalse(match.isPresent());
     }
 
-    @Test(expected = RouteNotFoundException.class)
+    @Test
     public void testRouteNotFoundExceptionOnInnerExtraSegment() {
-        registry.find(HttpMethod.GET, "/users/01234/orders/56789/comments");
+        Optional<RouteMatch> match = registry.find(HttpMethod.GET, "/users/01234/orders/56789/comments");
+        assertFalse(match.isPresent());
     }
 
     @Test

@@ -1,4 +1,4 @@
-package restelio.router;
+package restelio.router.exception;
 
 import restelio.router.RouteRegistry.RouteInfo;
 

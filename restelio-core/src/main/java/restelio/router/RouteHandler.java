@@ -1,27 +1,33 @@
 package restelio.router;
 
+import com.google.common.base.Optional;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.SubscriberExceptionContext;
 import com.google.common.eventbus.SubscriberExceptionHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import restelio.Restelio.HttpMethod;
-import restelio.listener.LifecycleEventListener;
+import restelio.router.RouteFilterChain.HandlerExecutionCallback;
 import restelio.router.RouteRegistry.RouteCallback;
+import restelio.router.RouteRegistry.RouteInfo;
+import restelio.router.RouteRegistry.RouteMatch;
 import restelio.router.event.Event;
 import restelio.router.event.LifecycleEvent;
-import restelio.support.RestelioContext;
+import restelio.router.exception.RestException;
+import restelio.router.listener.LifecycleEventListener;
+import restelio.support.RequestContext;
 import restelio.support.RestelioRequest;
 import restelio.support.RestelioResponse;
 
 /**
- * The core router, it handles filter and resources lifecycle
+ * The core router, here's where the magic happens.
+ * In real terms, it handles filter and resource lifecycle
  */
 public class RouteHandler implements SubscriberExceptionHandler {
 
     static final Logger log = LoggerFactory.getLogger(RouteHandler.class);
 
-    private static final ThreadLocal<RestelioContext> context = new ThreadLocal<RestelioContext>();
+    private static final ThreadLocal<RequestContext> context = new ThreadLocal<RequestContext>();
 
     private final RouteRegistry routeRegistry;
     private final RouteFilterChain filterChain;
@@ -36,23 +42,41 @@ public class RouteHandler implements SubscriberExceptionHandler {
         eventBus.register(new DefaultLifecycleEventListener());
     }
 
-    public void handle(RestelioRequest request, RestelioResponse response) {
+    public void handle(final RestelioRequest request, final RestelioResponse response) throws RestException {
         // Prepare the handler
         prepareHandler(request, response);
 
-        //Url url = Url.
-        postEvent(LifecycleEvent.requestStarted());
+        // Start handling the request
+        final String path = request.getPath();
+        postEvent(LifecycleEvent.requestStarted(path));
         try {
-            // TODO: Run filters
-            // TODO: Match request and instantiate the resource handler
-            // TODO: Handle the request
-
+            // Look for an existing route. If none, don't even bother to apply filters
+            final Optional<RouteMatch> match = routeRegistry.find(request.getMethod(), path);
+            filterChain.handle(match, getContext(), new HandlerExecutionCallback() {
+                @Override
+                public void executeHandler() throws RestException {
+                    Optional<RouteInfo> route = match.get().getRouteInfo();
+                    if (route.isPresent()) {
+                        RouteInfo routeInfo = route.get();
+                        Optional<RouteCallback> routeCallback = routeInfo.getCallback();
+                        if (routeCallback.isPresent()) {
+                            routeCallback.get().execute(routeInfo.getInstance(), getContext());
+                            return;
+                        }
+                    }
+                    // This should never happen, but just in case...
+                    log.error(String.format("Weird! No route callback available for path [%s %s]",
+                            request.getMethod(), request.getPath()));
+                    RestException.throwNotFound();
+                }
+            });
         } finally {
-            cleanupHandler();
-            // Clear the thread local context
-            context.remove();
+            // Cleanup all thread local stuff after handling
+            cleanupHandler(request);
         }
-        postEvent(LifecycleEvent.requestCompleted());
+
+        // Request handling done
+        postEvent(LifecycleEvent.requestCompleted(path));
     }
 
     /**
@@ -71,8 +95,8 @@ public class RouteHandler implements SubscriberExceptionHandler {
      * @param path
      * @param callback
      */
-    public void registerRoute(HttpMethod method, String path, RouteCallback callback) {
-        routeRegistry.register(method, path, callback);
+    public void registerRoute(HttpMethod method, String path, Object instance, RouteCallback callback) {
+        routeRegistry.register(method, path, instance, callback);
     }
 
     /**
@@ -106,7 +130,7 @@ public class RouteHandler implements SubscriberExceptionHandler {
      * Get the request context
      * @return the current thread local context
      */
-    public RestelioContext getContext() {
+    public RequestContext getContext() {
         return context.get();
     }
 
@@ -120,13 +144,16 @@ public class RouteHandler implements SubscriberExceptionHandler {
 
     private void prepareHandler(RestelioRequest request, RestelioResponse response) {
         // Create the request context (local to the request thread)
-        context.set(new RestelioContext(request, response));
-        postEvent(LifecycleEvent.handlerReady());
+        RequestContext ctx = new RequestContext(request, response);
+        context.set(ctx);
+
+        // Notify event listeners
+        postEvent(LifecycleEvent.handlerReady(request.getPath()));
     }
 
-    private void cleanupHandler() {
+    private void cleanupHandler(RestelioRequest request) {
         context.remove();
-        postEvent(LifecycleEvent.handlerCleaned());
+        postEvent(LifecycleEvent.handlerCleaned(request.getPath()));
     }
 
 
@@ -138,34 +165,30 @@ public class RouteHandler implements SubscriberExceptionHandler {
         static final Logger log = LoggerFactory.getLogger(DefaultLifecycleEventListener.class);
 
         @Override
-        public void onRequestStarted() {
-            super.onRequestStarted();
+        public void onRequestStarted(final String path) {
             if (log.isTraceEnabled()) {
-                log.trace("onRequestStarted()");
+                log.trace(String.format("onRequestStarted(%s)", path));
             }
         }
 
         @Override
-        public void onRequestCompleted() {
-            super.onRequestCompleted();
+        public void onRequestCompleted(final String path) {
             if (log.isTraceEnabled()) {
-                log.trace("onRequestCompleted()");
+                log.trace(String.format("onRequestCompleted(%s)", path));
             }
         }
 
         @Override
-        public void onHandlerReady() {
-            super.onHandlerReady();
+        public void onHandlerReady(final String path) {
             if (log.isTraceEnabled()) {
-                log.trace("onHandlerReady()");
+                log.trace(String.format("onHandlerReady(%s)", path));
             }
         }
 
         @Override
-        public void onHandlerCleanup() {
-            super.onHandlerCleanup();
+        public void onHandlerCleanup(final String path) {
             if (log.isTraceEnabled()) {
-                log.trace("onHandlerCleanup()");
+                log.trace(String.format("onHandlerCleanup(%s)", path));
             }
         }
     }
