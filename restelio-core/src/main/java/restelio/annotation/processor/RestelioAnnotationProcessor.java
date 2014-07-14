@@ -30,7 +30,7 @@ import java.util.Set;
         "restelio.annotation.RestelioResource",
         "restelio.annotation.RestelioFilter"
 })
-@SupportedSourceVersion(SourceVersion.RELEASE_7)
+@SupportedSourceVersion(SourceVersion.RELEASE_6)
 public class RestelioAnnotationProcessor extends AbstractProcessor {
 
     static final Logger log = LoggerFactory.getLogger(RestelioAnnotationProcessor.class);
