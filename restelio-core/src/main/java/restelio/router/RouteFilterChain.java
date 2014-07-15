@@ -28,6 +28,7 @@ import restelio.Restelio.HttpStatus;
 import restelio.router.RouteRegistry.RouteMatch;
 import restelio.router.exception.RestException;
 import restelio.support.RequestContext;
+import restelio.util.RegexUtil;
 
 import java.util.List;
 import java.util.Set;
@@ -208,9 +209,9 @@ public class RouteFilterChain {
         private final int order;
         private final RouteFilter instance;
 
-        public FilterInfo(HttpMethod[] methods, Pattern pattern, int order, RouteFilter instance) {
+        public FilterInfo(HttpMethod[] methods, String pattern, int order, RouteFilter instance) {
             this.methods = Sets.newHashSet((methods == null) ? new HttpMethod[] {} : methods);
-            this.pattern = pattern;
+            this.pattern = RegexUtil.compileFroromGlobalExpression(pattern);
             this.order = order;
             this.instance = instance;
         }
