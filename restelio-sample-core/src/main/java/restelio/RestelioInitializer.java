@@ -1,9 +1,25 @@
+/*
+ * Copyright 2014 Matteo Giaccone and contributors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package restelio;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import restelio.Restelio.HttpMethod;
-import restelio.filter.SecurityFilter;
+import restelio.filter.GZipResponseFilter;
 import restelio.router.RouteRegistry.RouteCallback;
 import restelio.sample.core.SampleResource;
 import restelio.support.RequestContext;
@@ -15,6 +31,7 @@ public class RestelioInitializer {
 
     static final Logger log = LoggerFactory.getLogger(RestelioInitializer.class);
 
+    // TODO: REMOVE ME
     private static final String PATTERN_MATCH_ALL = "/*";
 
     private Restelio restelio;
@@ -24,9 +41,6 @@ public class RestelioInitializer {
     }
 
     public void initialize() {
-        log.info("Initializing default components...");
-        initializeDefaultComponents();
-
         log.info("Initializing filters...");
         initializeFilterChain();
 
@@ -34,36 +48,32 @@ public class RestelioInitializer {
         initializeRouteRegistry();
     }
 
-    private void initializeDefaultComponents() {
-        restelio.registerFilter(PATTERN_MATCH_ALL, Integer.MIN_VALUE, new SecurityFilter());
-    }
-
     private void initializeRouteRegistry() {
         // Instantiate the resource class (with DI parameters)
         SampleResource instance = new SampleResource();
 
-        restelio.registerRoute(HttpMethod.GET, "/route/get", instance, new RouteCallback() {
+        restelio.registerRoute(instance, HttpMethod.GET, "/route/get", new RouteCallback() {
             @Override
             public void execute(Object instance, RequestContext context) {
 
             }
         });
 
-        restelio.registerRoute(HttpMethod.POST, "/route/post", instance, new RouteCallback() {
+        restelio.registerRoute(instance, HttpMethod.POST, "/route/post", new RouteCallback() {
             @Override
             public void execute(Object instance, RequestContext context) {
 
             }
         });
 
-        restelio.registerRoute(HttpMethod.PUT, "/route/put", instance, new RouteCallback() {
+        restelio.registerRoute(instance, HttpMethod.PUT, "/route/put", new RouteCallback() {
             @Override
             public void execute(Object instance, RequestContext context) {
 
             }
         });
 
-        restelio.registerRoute(HttpMethod.DELETE, "/route/delete", instance, new RouteCallback() {
+        restelio.registerRoute(instance, HttpMethod.DELETE, "/route/delete", new RouteCallback() {
             @Override
             public void execute(Object instance, RequestContext context) {
 
@@ -72,7 +82,7 @@ public class RestelioInitializer {
     }
 
     private void initializeFilterChain() {
-
+        restelio.registerFilter(new GZipResponseFilter(), 0, PATTERN_MATCH_ALL, HttpMethod.GET);
     }
 
 }

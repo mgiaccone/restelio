@@ -1,3 +1,19 @@
+/*
+ * Copyright 2014 Matteo Giaccone and contributors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package restelio;
 
 import com.google.common.base.Stopwatch;
@@ -77,24 +93,17 @@ public class Restelio {
     }
 
     /**
-     * @see restelio.router.RouteHandler#registerRoute(restelio.Restelio.HttpMethod, String, restelio.router.RouteRegistry.RouteCallback)
+     * @see restelio.router.RouteHandler#registerRoute(Object, restelio.Restelio.HttpMethod, String, restelio.router.RouteRegistry.RouteCallback)
      */
-    public static void registerRoute(HttpMethod method, String path, Object instance, RouteCallback callback) {
-        get().getRouteHandler().registerRoute(method, path, instance, callback);
+    public static void registerRoute(Object instance, HttpMethod method, String path, RouteCallback callback) {
+        get().getRouteHandler().registerRoute(instance, method, path, callback);
     }
 
     /**
-     * @see restelio.router.RouteHandler#registerFilter(String, int, restelio.router.RouteFilter)
+     * @see restelio.router.RouteHandler#registerFilter(restelio.router.RouteFilter, int, String, restelio.Restelio.HttpMethod...)
      */
-    public static void registerFilter(String pattern, int order, RouteFilter instance) {
-        registerFilter(null, pattern, order, instance);
-    }
-
-    /**
-     * @see restelio.router.RouteHandler#registerFilter(restelio.Restelio.HttpMethod[], String, int, restelio.router.RouteFilter)
-     */
-    public static void registerFilter(HttpMethod[] methods, String pattern, int order, RouteFilter instance) {
-        get().getRouteHandler().registerFilter(methods, pattern, order, instance);
+    public static void registerFilter(RouteFilter instance, int order, String pattern, HttpMethod... methods) {
+        get().getRouteHandler().registerFilter(instance, order, pattern, methods);
     }
 
     /**

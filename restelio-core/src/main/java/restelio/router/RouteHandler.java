@@ -1,3 +1,19 @@
+/*
+ * Copyright 2014 Matteo Giaccone and contributors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package restelio.router;
 
 import com.google.common.base.Optional;
@@ -32,6 +48,7 @@ public class RouteHandler implements SubscriberExceptionHandler {
     private final RouteRegistry routeRegistry;
     private final RouteFilterChain filterChain;
     private final EventBus eventBus;
+    private boolean filterChainInitialized;
 
     public RouteHandler() {
         this.routeRegistry = new RouteRegistry();
@@ -60,13 +77,21 @@ public class RouteHandler implements SubscriberExceptionHandler {
                         RouteInfo routeInfo = route.get();
                         Optional<RouteCallback> routeCallback = routeInfo.getCallback();
                         if (routeCallback.isPresent()) {
+                            if (log.isTraceEnabled()) {
+                                log.trace(String.format("Executing route handler fo path [%s] %s",
+                                                request.getMethod(), path)
+                                );
+                            }
+                            // TODO: Add lifecycle listeners
                             routeCallback.get().execute(routeInfo.getInstance(), getContext());
                             return;
                         }
                     }
                     // This should never happen, but just in case...
-                    log.error(String.format("Weird! No route callback available for path [%s %s]",
+                    log.error(String.format("Ops...! Something is wrong here, no route callback available for path [%s %s]",
                             request.getMethod(), request.getPath()));
+
+                    // Throw a not found exception
                     RestException.throwNotFound();
                 }
             });
@@ -95,17 +120,8 @@ public class RouteHandler implements SubscriberExceptionHandler {
      * @param path
      * @param callback
      */
-    public void registerRoute(HttpMethod method, String path, Object instance, RouteCallback callback) {
+    public void registerRoute(Object instance, HttpMethod method, String path, RouteCallback callback) {
         routeRegistry.register(method, path, instance, callback);
-    }
-
-    /**
-     * Register a filter instance to be applied when the request match the specified pattern and any method
-     * @param pattern The URL pattern to apply the filter to
-     * @param instance The instance of the filter
-     */
-    public void registerFilter(String pattern, int order, RouteFilter instance) {
-        registerFilter(null, pattern, order, instance);
     }
 
     /**
@@ -114,8 +130,8 @@ public class RouteHandler implements SubscriberExceptionHandler {
      * @param pattern The URL pattern to apply the filter to
      * @param instance The instance of the filter
      */
-    public void registerFilter(HttpMethod[] methods, String pattern, int order, RouteFilter instance) {
-        // FIXME: Do registration of filter
+    public void registerFilter(RouteFilter instance, int order, String pattern, HttpMethod... methods) {
+        filterChain.registerFilter(methods, pattern, order, instance);
     }
 
     /**
@@ -134,19 +150,16 @@ public class RouteHandler implements SubscriberExceptionHandler {
         return context.get();
     }
 
-    /**
-     * Get the route registry instance
-     * @return the route registry
-     */
-    public RouteRegistry getRouteRegistry() {
-        return routeRegistry;
-    }
-
     private void prepareHandler(RestelioRequest request, RestelioResponse response) {
         // Create the request context (local to the request thread)
         RequestContext ctx = new RequestContext(request, response);
         context.set(ctx);
 
+        // Initialize the filter chain the first time
+        if (!filterChainInitialized) {
+            filterChain.init();
+            filterChainInitialized = true; // TODO: use event bus to change this
+        }
         // Notify event listeners
         postEvent(LifecycleEvent.handlerReady(request.getPath()));
     }

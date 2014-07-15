@@ -1,3 +1,19 @@
+/*
+ * Copyright 2014 Matteo Giaccone and contributors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package restelio.router;
 
 import com.google.common.base.Optional;
@@ -48,8 +64,8 @@ public class RouteRegistry {
         RouteInfo routeInfo = new RouteInfo(method, path, instance, callback);
         if (isPathValid(path)) {
             RouteInfo result = registerInternal(rootNode, splitPath(path), routeInfo);
-            if (log.isInfoEnabled()) {
-                log.info(String.format("Registered route %s", result.toString()));
+            if (log.isDebugEnabled()) {
+                log.debug(String.format("Registered route %s", result.toString()));
             }
             return result;
         } else {
