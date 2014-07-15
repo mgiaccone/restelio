@@ -56,7 +56,7 @@ allprojects {
     }
 
     group = "restelio"
-    version = '1.0.0'
+    version = 'DEV'
 
     apply plugin: 'eclipse'
     apply plugin: 'idea'
@@ -84,7 +84,7 @@ configure(project.frameworkProjects) {
     }
 
     jar {
-        manifest.attributes provider: 'Ubiqueworks Ltd'
+        manifest.attributes provider: 'Matteo Giaccone, Ubiqueworks Ltd'
     }
 
     jacoco {
