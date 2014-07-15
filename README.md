@@ -51,4 +51,5 @@ A full copy of the Apache License, Version 2.0 can be found [here](http://www.ap
 <!--
 http://semver.org/
 netty.io
+http://danielkummer.github.io/git-flow-cheatsheet/
 -->
