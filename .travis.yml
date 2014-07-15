@@ -6,5 +6,6 @@ jdk:
 
 branches:
   only:
+    - master
     - develop
     - /^release\/.+$/
