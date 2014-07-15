@@ -23,7 +23,9 @@ I know you're thinking "Oh dear... another one!", well.. YES! The development st
 
 ## Contribute
 
-Do you want to contribute? Thanks, that great! Please just make sure you read our [[Contributor Guidelines]] first.
+Do you want to contribute? Thanks, that great! 
+
+Please just make sure you read our [[Contributor Guidelines]] first.
 
 ## Licence
 
