@@ -2,7 +2,7 @@
 
 ### Initial work in progress, come back soon!
 
-## Restelio
+## Restel I/O
 
 Restel I/O is a fast and lightweight REST framework for Java. 
 
