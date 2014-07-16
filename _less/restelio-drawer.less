@@ -1,0 +1,43 @@
+//* {
+//  -webkit-box-sizing: border-box;
+//  -moz-box-sizing: border-box;
+//  box-sizing: border-box;
+//}
+
+html, body, .rio-drawer-container, .rio-drawer-menu, .rio-drawer-content {
+  height: 100%;
+}
+
+.rio-drawer-container, .rio-drawer-content {
+  position: relative;
+}
+
+.rio-drawer-container {
+  overflow: hidden;
+}
+
+.rio-drawer-content {
+  z-index: 1;
+  width: 100%;
+  overflow: auto;
+  background: #fff;
+}
+
+.rio-drawer-menu {
+  position: absolute;
+  top: 0;
+  z-index: 0;
+  width: 75%;
+  background: #0b79e5;
+  visibility: hidden;
+  opacity: 0;
+}
+
+.rio-drawer-left {
+  left: 0;
+}
+
+.rio-drawer-open {
+  visibility: visible;
+  opacity: 1;
+}

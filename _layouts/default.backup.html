@@ -5,8 +5,8 @@
 {% include header.html %}
 
 <!-- the viewport -->
-<div class="rio-drawer-container">
-    <div class="rio-drawer-menu rio-drawer-left">
+<div class="m-pikabu-viewport">
+    <div class="m-pikabu-sidebar m-pikabu-left">
         <ul>
             {% for item in site.data.items_topnav %}
             <li>
@@ -16,9 +16,10 @@
         </ul>
     </div>
 
-    <!-- Content -->
-    <div class="rio-drawer-content">
-        <section>{{ content }}</section>
+    <!-- the main page content -->
+    <div class="m-pikabu-container">
+        <!-- Content -->
+        <section class="rio-content">{{ content }}</section>
     </div>
 </div>
 
