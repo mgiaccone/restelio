@@ -1,0 +1,22 @@
+{% include top.html %}
+<body>
+
+<!-- the viewport -->
+<div class="m-pikabu-viewport">
+    {% include sidebar.html %}
+
+    <!-- the main page content -->
+    <div class="m-pikabu-container">
+        <!-- Header -->
+        {% include header.html %}
+
+        <!-- Content -->
+        {{ content }}
+    </div>
+</div>
+
+<!-- Scripts -->
+{% include scripts_common.html %}
+{% include scripts_analytics.html %}
+</body>
+{% include bottom.html %}

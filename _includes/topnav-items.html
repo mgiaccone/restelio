@@ -1,0 +1,9 @@
+<ul>
+    {% for item in site.data.items_topnav %}
+    <li>
+        <a href="{{ item.link }}">
+            {{ item.title }}
+        </a>
+    </li>
+    {% endfor %}
+</ul>

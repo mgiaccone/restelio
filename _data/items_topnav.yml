@@ -1,0 +1,23 @@
+#- title: Home
+#  link: /
+#
+- title: Get started!
+  link: /tutorial
+  target: _self
+
+- title: News
+  link: /news
+  target: _self
+
+- title: Documentation
+  link: /documentation
+  target: _self
+
+- title: API
+  link: /api
+  target: _self
+
+- title: Source code
+  link: https://mgiaccone.github.io/restelio
+  target: _blank
+

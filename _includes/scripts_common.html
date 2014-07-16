@@ -1,0 +1,25 @@
+<script src="/js/jquery-1.11.1.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/pikabu-0.2.1.min.js"></script>
+<script src="/js/restelio.js"></script>
+<script>
+    $(function() {
+        pikabu = new Pikabu({
+            widths: {
+                left: '70%'
+            }
+////        selectors: {
+////            element: '.m-pikabu-container',
+////            // Sidebars
+////            common: '.m-pikabu-sidebar',
+////            left: '.m-pikabu-left',
+////            right: '.m-pikabu-right',
+////            // Click-to-close overlay
+////            overlay: '.m-pikabu-overlay',
+////            // Controls that trigger the sidebar
+////            navToggles: '.m-pikabu-nav-toggle'
+////        }
+        });
+        restelio.init();
+    });
+</script>
