@@ -1,0 +1,31 @@
+<component name="libraryTable">
+  <library name="Generated files" type="javaScript">
+    <properties>
+      <sourceFilesUrls>
+        <item url="file://$PROJECT_DIR$/js/restelio.min.js" />
+        <item url="file://$PROJECT_DIR$/js/restelio.min.js" />
+        <item url="file://$PROJECT_DIR$/_site/js/bootstrap.min.js" />
+        <item url="file://$PROJECT_DIR$/_site/js/respond-1.4.2.min.min.js" />
+        <item url="file://$PROJECT_DIR$/_site/js/html5shiv.min.min.js" />
+        <item url="file://$PROJECT_DIR$/_site/js/jquery-1.11.1.min.min.js" />
+        <item url="file://$PROJECT_DIR$/_site/js/bootstrap.min.min.js" />
+        <item url="file://$PROJECT_DIR$/_site/js/restelio.min.js" />
+        <item url="file://$PROJECT_DIR$/_site/js/html5shiv-printshiv.min.min.js" />
+      </sourceFilesUrls>
+    </properties>
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/_site/js/restelio.min.min.js" />
+      <root url="file://$PROJECT_DIR$/_site/js/restelio.min.min.js" />
+      <root url="file://$PROJECT_DIR$/js/restelio.min.js" />
+      <root url="file://$PROJECT_DIR$/_site/js/bootstrap.min.js" />
+      <root url="file://$PROJECT_DIR$/js/restelio.min.js" />
+      <root url="file://$PROJECT_DIR$/_site/js/respond-1.4.2.min.min.js" />
+      <root url="file://$PROJECT_DIR$/_site/js/html5shiv.min.min.js" />
+      <root url="file://$PROJECT_DIR$/_site/js/jquery-1.11.1.min.min.js" />
+      <root url="file://$PROJECT_DIR$/_site/js/bootstrap.min.min.js" />
+      <root url="file://$PROJECT_DIR$/_site/js/html5shiv-printshiv.min.min.js" />
+      <root url="file://$PROJECT_DIR$/_site/js/restelio.min.js" />
+    </CLASSES>
+    <SOURCES />
+  </library>
+</component>
