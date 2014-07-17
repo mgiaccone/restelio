@@ -1,33 +1,41 @@
 html, body {
   font-family: "robotolight", Helvetica, sans-serif;
-  font-size: 14px;
-}
-
-// Viewport below fixed navbar
-.rio-drawer-container {
-  margin-top: @navbar-height;
+  font-size: 16px;
 }
 
 // Don't float the toggle to the right
 .navbar-toggle {
   float: none;
+  margin-left: @navbar-padding-horizontal;
 }
 
 .navbar-brand {
   float: none;
   padding-top: 0;
   padding-bottom: 0;
+  padding-left: 0;
 }
 
-//@media (min-width: @screen-sm-min) {
-//
-//}
-//
-//@media (min-width: @screen-md-min) {
-//  float: right;
-//}
-//
-//@media (min-width: @screen-lg-min) {
-//
-//}
+// FAQ
+.rio-faq-target {
+  padding-top: @navbar-height;
+  margin-top: -@navbar-height;
+}
+
+@media (min-width: @screen-sm-min) {
+  .rio-navbar-header {
+    font-family: "robotoregular", Helvetica, sans-serif;
+  }
+  .navbar-brand {
+    padding-left: @navbar-padding-horizontal;
+  }
+}
+
+@media (min-width: @screen-md-min) {
+  float: right;
+}
+
+@media (min-width: @screen-lg-min) {
+
+}
 

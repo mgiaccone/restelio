@@ -1,28 +1,14 @@
 {% include top.html %}
 <body>
-
-<!-- Header -->
 {% include header.html %}
-
-<!-- the viewport -->
 <div class="rio-drawer-container">
     <div class="rio-drawer-menu rio-drawer-left">
-        <ul>
-            {% for item in site.data.items_topnav %}
-            <li>
-                <a href="{{ item.link }}" target="{{ item.target }}">{{ item.title }}</a>
-            </li>
-            {% endfor %}
-        </ul>
+        {% include menu_drawer.html %}
     </div>
-
-    <!-- Content -->
     <div class="rio-drawer-content">
         <section>{{ content }}</section>
     </div>
 </div>
-
-<!-- Scripts -->
 {% include scripts_common.html %}
 {% include scripts_analytics.html %}
 </body>

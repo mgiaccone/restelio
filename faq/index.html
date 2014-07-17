@@ -1,0 +1,28 @@
+---
+layout: default
+title: RestilIO - FAQ
+overview: true
+---
+
+
+<h2 id="top" class="rio-faq-target">FAQ</h2>
+<div class="rio-faq-summary">
+    <ul>
+    {% for faq in site.data.faqs %}
+    <li class="rio-faq-question"><a href="#faq{{ faq.id }}">{{ faq.question }}</a></li>
+    {% endfor %}
+    </ul>
+</div>
+
+
+<div class="rio-faq-answers">
+    <ul>
+        {% for faq in site.data.faqs %}
+
+        <li><a href="#top">Top <span class="glyphicon glyphicon-chevron-up"></span></a></li>
+        <li class="rio-faq-question"><h4 id="faq{{ faq.id }}" class="rio-faq-target">{{ faq.question }}</h4></li>
+        <li class="rio-faq-answer">{{ faq.answer }}</li>
+        <br/>
+        {% endfor %}
+    </ul>
+</div>
