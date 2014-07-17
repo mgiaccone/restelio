@@ -3,17 +3,23 @@ Restelio = function() {
 };
 
 Restelio.prototype.init = function() {
-//    alert("Initializing restelio");
-//    this.navbarFading();
+    this.switchApiVersion($("#rio-javadoc-select"));
 };
 
-Restelio.prototype.navbarFading = function() {
-    alert("Navbar");
+/**
+ * Javadoc version selector handling
+ * @param el The select element
+ */
+Restelio.prototype.switchApiVersion = function(el) {
+    if (el) {
+        $("#rio-javadoc-iframe").attr("src", $(el).val());
+    }
 };
 
 // closure compiler externs
 window['Restelio'] = Restelio; // <-- Constructor
 Restelio.prototype['init'] = Restelio.prototype.init;
+Restelio.prototype['switchApiVersion'] = Restelio.prototype.switchApiVersion;
 
 // register instance on load
 var restelio = restelio || new Restelio();

@@ -3,7 +3,7 @@ html, body {
   font-size: 16px;
 }
 
-// Don't float the toggle to the right
+// Header
 .navbar-toggle {
   float: none;
   margin-left: @navbar-padding-horizontal;
@@ -16,19 +16,56 @@ html, body {
   padding-left: 0;
 }
 
+// Base
+.rio-content {
+  height: 100%;
+}
+
+.breadcrumb {
+//  position: absolute;
+//  top: @rio-navbar-height;
+//  left: 0;
+//  width: 100%;
+  font-size: 14px;
+}
+
+// Drawer
+.rio-drawer-container {
+  //margin-top: @rio-header-height;
+  margin-top: @rio-navbar-height;
+}
+
+//.api .rio-drawer-container {
+//  //margin-top: @rio-header-height;
+//  margin-top: @rio-navbar-height;
+//}
+
+// API
+.api .breadcrumb {
+  margin-bottom: 0;
+}
+
 // FAQ
 .rio-faq-target {
-  padding-top: @navbar-height;
-  margin-top: -@navbar-height;
+  padding-top: @rio-header-height;
+  margin-top: -@rio-header-height;
 }
 
 @media (min-width: @screen-sm-min) {
   .rio-navbar-header {
     font-family: "robotoregular", Helvetica, sans-serif;
   }
+
+  // Header
   .navbar-brand {
     padding-left: @navbar-padding-horizontal;
   }
+
+  // Drawer
+  .rio-drawer-container {
+    margin-top: @rio-header-height;
+  }
+
 }
 
 @media (min-width: @screen-md-min) {

@@ -1,0 +1,21 @@
+{% if page.breadcrumbs %}
+<ol class="breadcrumb">
+{% for item in page.breadcrumbs %}
+    {% if item.link %}
+    <li><a href="{{ item.link }}">{{ item.title }}</a></li>
+    {% else %}
+    <li class="active">{{ page.title }}</li>
+    {% endif %}
+{% endfor %}
+
+{% if page.class == 'api' %}
+    <li class="active">
+        <select id="rio-javadoc-select" onchange="restelio.switchApiVersion(this);">
+            {% for item in site.data.versions %}
+            <option value="{{ item.link }}" {% if item.selected %}selected{% endif %}>{{ item.name}}</option>
+            {% endfor %}
+        </select>
+    </li>
+{% endif %}
+</ol>
+{% endif %}

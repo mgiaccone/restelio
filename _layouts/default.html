@@ -1,12 +1,13 @@
 {% include top.html %}
-<body>
+<body class="{{ page.class }}">
 {% include header.html %}
 <div class="rio-drawer-container">
     <div class="rio-drawer-menu rio-drawer-left">
         {% include menu_drawer.html %}
     </div>
     <div class="rio-drawer-content">
-        <section>{{ content }}</section>
+        {% include breadcrumbs.html %}
+        <section class="rio-content">{{ content }}</section>
     </div>
 </div>
 {% include scripts_common.html %}
