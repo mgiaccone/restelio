@@ -5595,12 +5595,6 @@ body,
 .rio-drawer-container {
   overflow: hidden;
 }
-.rio-drawer-content {
-  z-index: 1;
-  width: 100%;
-  overflow: auto;
-  background: #fff;
-}
 .rio-drawer-menu {
   position: fixed;
   margin-top: 64px;
@@ -5623,6 +5617,7 @@ html,
 body {
   font-family: "robotolight", Helvetica, sans-serif;
   font-size: 16px;
+  overflow: hidden;
 }
 .navbar-toggle {
   float: none;
@@ -5639,16 +5634,23 @@ body {
 }
 .breadcrumb {
   font-size: 14px;
+  margin-bottom: 0;
 }
 .rio-drawer-container {
-  margin-top: 64px;
+  padding-top: 64px;
+}
+.rio-content {
+  z-index: 1;
+  width: 100%;
+  overflow: auto;
+  background: #fff;
 }
 .api .breadcrumb {
   margin-bottom: 0;
 }
 .rio-faq-target {
-  padding-top: 100px;
-  margin-top: -100px;
+  padding-top: 64px;
+  margin-top: -64px;
 }
 @media (min-width: 768px) {
   .rio-navbar-header {
@@ -5656,9 +5658,6 @@ body {
   }
   .navbar-brand {
     padding-left: 15px;
-  }
-  .rio-drawer-container {
-    margin-top: 100px;
   }
 }
 @media (min-width: 992px) {

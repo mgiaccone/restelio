@@ -1,6 +1,7 @@
 html, body {
   font-family: "robotolight", Helvetica, sans-serif;
   font-size: 16px;
+  overflow: hidden;
 }
 
 // Header
@@ -18,7 +19,7 @@ html, body {
 
 // Base
 .rio-content {
-  height: 100%;
+  height: 100%; // This has to be tracked with JS and changed accordingly
 }
 
 .breadcrumb {
@@ -27,12 +28,20 @@ html, body {
 //  left: 0;
 //  width: 100%;
   font-size: 14px;
+  margin-bottom: 0;
 }
 
 // Drawer
 .rio-drawer-container {
   //margin-top: @rio-header-height;
-  margin-top: @rio-navbar-height;
+  padding-top: @rio-navbar-height;
+}
+
+.rio-content {
+  z-index: 1;
+  width: 100%;
+  overflow: auto;
+  background: #fff;
 }
 
 //.api .rio-drawer-container {
@@ -47,8 +56,8 @@ html, body {
 
 // FAQ
 .rio-faq-target {
-  padding-top: @rio-header-height;
-  margin-top: -@rio-header-height;
+  padding-top: @rio-navbar-height;
+  margin-top: -@rio-navbar-height;
 }
 
 @media (min-width: @screen-sm-min) {
@@ -61,10 +70,10 @@ html, body {
     padding-left: @navbar-padding-horizontal;
   }
 
-  // Drawer
-  .rio-drawer-container {
-    margin-top: @rio-header-height;
-  }
+//  // Drawer
+//  .rio-drawer-container {
+//    margin-top: @rio-header-height;
+//  }
 
 }
 
