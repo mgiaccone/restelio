@@ -1,5 +1,5 @@
 {% if page.breadcrumbs %}
-<ol class="breadcrumb">
+<ol id="rio-breadcrumb" class="breadcrumb visible-sm-block">
 {% for item in page.breadcrumbs %}
     {% if item.link %}
     <li><a href="{{ item.link }}">{{ item.title }}</a></li>

@@ -1,31 +1,8 @@
 <script src="/js/jquery-1.11.1.min.js"></script>
 <script src="/js/bootstrap.min.js"></script>
-<!--<script src="/js/pikabu-0.2.1.min.js"></script>-->
-<script src="/js/jquery.drawer.js"></script>
 <script src="/js/restelio.js"></script>
 <script>
-    $(function() {
-        // Side drawer menu for mobile
-        $('.rio-drawer-toggle').drawer({
-            menu: '.rio-drawer-menu', // Menu element
-            push: '.rio-drawer-content', // Container element to push
-            side: 'left',
-            speed: 400,
-            class: 'rio-drawer-open'
-        });
-//        pikabu = new Pikabu();
-//        pikabu = new Pikabu({
-//            selectors: {
-//                element: '.rio-drawer-container',
-//                common: '.rio-drawer-sidebar',
-//                left: '.rio-drawer-left',
-//                right: '.rio-drawer-right',
-//                overlay: '.rio-drawer-overlay',
-//                navToggles: '.rio-drawer-nav-toggle'
-//            }
-//        });
-
-        // Init custom JS
-        restelio.init();
-    });
+$(function() {
+    restelio.init();
+});
 </script>

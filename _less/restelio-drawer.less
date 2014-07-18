@@ -1,49 +1,33 @@
-//* {
-//  -webkit-box-sizing: border-box;
-//  -moz-box-sizing: border-box;
-//  box-sizing: border-box;
-//}
-
-html, body, .rio-drawer-container, .rio-drawer-menu, .rio-drawer-content {
-  height: 100%;
-}
-
-.rio-drawer-container, .rio-drawer-content {
-  position: relative;
-}
-
-.rio-drawer-container {
-  overflow: hidden;
-}
-
-//.rio-drawer-content {
-//  z-index: 1;
-//  width: 100%;
-//  overflow: auto;
-//  background: #fff;
-//}
-
-.rio-drawer-menu {
+// Drawer
+#rio-drawer-menu {
+  background: @rio-drawer-bg;
+  //  display: none;
   position: fixed;
-  margin-top: @navbar-height;
-  top: 0;
-  z-index: 0;
-  width: 75%;
-  max-width: @drawer-max-width;
-  background: #0b79e5;
-  visibility: hidden;
-  opacity: 0;
+  z-index: @zindex-rio-drawer !important;
+  max-width: 320px;
+  width: 80%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  opacity: 0.98;
 }
 
-.rio-drawer-left {
-  left: 0;
+.rio-drawer-overlay {
+  position: fixed;
+  background: @rio-drawer-bg;
+  z-index: @zindex-rio-drawer-overlay !important;
+  display: none;
+  opacity: 0.5;
+  width: 100%;
 }
 
 .rio-drawer-open {
-  visibility: visible;
-  opacity: 1;
+  //  display: block;
+  //  opacity: 0.98;
 }
 
-.rio-drawer-menu-items {
-
+.rio-page-content {
+  //  z-index: 1;
+  //  width: 100%;
+  //  overflow: auto;
+  //  background: #fff;
 }

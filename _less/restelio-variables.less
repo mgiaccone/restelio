@@ -1,5 +1,7 @@
-@rio-navbar-height: @navbar-height;
-@rio-breadcrumb-height: 36px;
+@zindex-rio-drawer-overlay:   @zindex-navbar-fixed;
+@zindex-rio-drawer:           (@zindex-rio-drawer-overlay + 1);
 
-// Header + Breadcrumb
-@rio-header-height: (@navbar-height + @rio-breadcrumb-height);
+@rio-navbar-height:           @navbar-height;
+
+@rio-drawer-bg:               @navbar-inverse-bg;
+@rio-drawer-overlay-bg:       lighten(@rio-drawer-bg, 10%);
