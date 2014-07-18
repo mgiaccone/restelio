@@ -1,16 +1,8 @@
 {% for item in site.data.navitems %}
-<li>
-    {% if item.items %}
-    <li class="dropdown">
-        <a class="dropdown-toggle" href="#" data-toggle="dropdown">{{ item.title }} <span class="caret"></span></a>
-        <ul class="dropdown-menu" role="menu">
-            {% for subitem in item.items %}
-            <li><a href="{{ subitem.link }}" target="{{ subitem.target }}">{{ subitem.title }}</a></li>
-            {% endfor %}
-        </ul>
-    </li>
-    {% else %}
-    <a class="{% if page.url contains item.link %}active{% endif %}" href="{{ item.link }}" target="{{ item.target }}">{{ item.title }}</a>
-    {% endif %}
-</li>
+<li><a class="{% if page.url contains item.link %}active{% endif %}" href="{{ item.link }}" target="{{ item.target }}">{{ item.title }}</a></li>
+{% if item.items %}
+{% for subitem in item.items %}
+<li><a class="{% if page.url contains subitem.link %}active{% endif %}" href="{{ subitem.link }}" target="{{ subitem.target }}">{{ subitem.title }}</a></li>
+{% endfor %}
+{% endif %}
 {% endfor %}

@@ -64,7 +64,6 @@ Restelio.prototype.toggleDrawer = function(e) {
         drawerEl.addClass('rio-drawer-open')
             .stop(true)
             .animate({ left : 0 }, restelio.animationDuration, function() {
-                console.log('Added overlay click event');
                 $(document).on('click touchend', '.rio-drawer-overlay', restelio.toggleDrawer);
             });
 
@@ -95,9 +94,7 @@ Restelio.prototype.resizeDrawer = function() {
     this.resizeElementToFillPage(elDrawer, this.navbarHeight);
 
     var elOverlay = $(".rio-drawer-overlay");
-    console.log('got drawer overlay [' + elOverlay.length + ']');
     if (elOverlay.length) {
-        console.log('resizing drawer overlay');
         this.resizeElementToFillPage(elOverlay, this.navbarHeight);
     }
 }
@@ -107,7 +104,6 @@ Restelio.prototype.resizeElementToFillPage = function(el, top) {
         var marginTop = (top || 0);
         var h = $(window).height() - marginTop;
         $(el).height(h);
-        console.log('element size [h=' + $(el).outerHeight() + ', w=' + el.outerWidth() + ', top=' + marginTop + ']');
     }
 };
 

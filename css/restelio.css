@@ -5589,7 +5589,7 @@ button.close {
   width: 80%;
   overflow-x: hidden;
   overflow-y: auto;
-  opacity: 0.98;
+  opacity: 0.9;
 }
 .rio-drawer-overlay {
   position: fixed;
