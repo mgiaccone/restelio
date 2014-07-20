@@ -1,9 +1,8 @@
-<article>
+<article class="rio-news-indexitem">
 <h3><a href="{{ post.url }}">{{ post.title }}</a></h3>
-<p class="author">
-    <span class="date">{{ post.date }}</span>
-</p>
-<div class="content">
-    {{ post.excerpt | remove: '<p>' | remove: '</p>' }}
+<h5><small>Posted by {{ post.author | markdownify  | remove: '<p>' | remove: '</p>' }} on {{ post.date | date_to_string }}</small></h5>
+<div>
+    {{ post.excerpt | remove: '<p>' | remove: '</p>' }} <a href="{{ post.url }}">Read more...</a>
 </div>
+<!--<div class="rio-news-readmore"><a href="{{ post.url }}">Read more...</a></div>-->
 </article>

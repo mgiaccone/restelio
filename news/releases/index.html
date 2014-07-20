@@ -1,20 +1,26 @@
 ---
 class       : news
 layout      : default
-title       : Latest news
+title       : Releases
 breadcrumbs :
     - title     : Home
       link      : /
     - title     : News
+      link      : /news
+    - title     : Releases
 ---
 
 <div class="container">
     <div class="row">
         <!-- Content -->
         <div class="col-sm-8 blog-main">
-            {% for post in site.posts %}
-            {% include news_index_item.html %}
-            {% endfor %}
+            {% if site.categories.release %}
+                {% for post in site.categories.release %}
+                {% include news_index_item.html %}
+                {% endfor %}
+            {% else %}
+            <h3>Sorry! No releases are available right now</h3>
+            {% endif %}
         </div>
 
         <!-- Sidebar -->

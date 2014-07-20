@@ -10,37 +10,44 @@ breadcrumbs:
     - title     : FAQ
 ---
 
-<div class="container-fluid">
-    <!--<div class="row">-->
-        <!--<div class="col-sm-12">-->
-            <!--<h2 id="top" class="rio-faq-target">{{ page.title }}</h2>-->
-        <!--</div>-->
-    <!--</div>-->
+<div class="container">
+    <div id="top"></div>
 
     <div class="row">
         <div class="col-xs-12">
-                <ol class="rio-faq-summary">
+            <h3>Questions</h3>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12">
+                <ul class="rio-faq-summary">
                     {% for faq in site.data.faqs %}
                     <li class="rio-faq-question"><a href="#faq{{ faq.id }}">{{ faq.question }}</a></li>
                     {% endfor %}
-                </ol>
+                </ul>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12">
+            <h3>Answers</h3>
         </div>
     </div>
 
     {% for faq in site.data.faqs %}
     <div class="row">
         <div class="col-xs-12">
-            <h4 id="faq{{ faq.id }}" class="rio-faq-target">{{ faq.question }}</h4>
+            <div class="rio-faq-answer">
+                <div>
+                    <small>
+                        <a class="pull-right" href="#top">Top <span class="glyphicon glyphicon-chevron-up"></span></a>
+                    </small>
+                </div>
+                <h4 id="faq{{ faq.id }}" class="rio-faq-header">{{ faq.question }}</h4>
+                <p>{{ faq.answer | markdownify }}</p>
+            </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-xs-12"><p>{{ faq.answer }}</p></div>
-    </div>
-    <div class="row">
-        <div class="col-xs-12">
-            <a class="pull-right" href="#top">Top <span class="glyphicon glyphicon-chevron-up"></span></a>
-        </div>
-    </div>
-
     {% endfor %}
 </div>

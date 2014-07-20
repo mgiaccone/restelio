@@ -1,34 +1,34 @@
-- id      : quickstart
-  title   : Quickstart
-  link    : /quickstart
-  target  : _self
-
 - id      : news
   title   : News
   link    : /news
   target  : _self
+
+#- id      : quickstart
+#  title   : Quickstart
+#  link    : /quickstart
+#  target  : _self
 
 - id        : documentation
   title     : Documentation
   link      : /documentation
   hideflat  : true
   items     :
-      - id      : api
-        title   : API Reference
-        link    : /documentation/api
-        target  : _self
-
-      - title   : Forum
-        link    : javascript:void(0);
-        target  : _target
+#      - id      : api
+#        title   : API Reference
+#        link    : /documentation/api
+#        target  : _self
+#
+#      - title   : Changelog
+#        link    : \#
+#        target  : _self
+#
+#      - title   : Forum
+#        link    : javascript:void(0);
+#        target  : _target
 
       - id      : faq
         title   : FAQ
         link    : /documentation/faq
-        target  : _self
-
-      - title   : Changelog
-        link    : \#
         target  : _self
 
       - title   : Contributors
@@ -38,13 +38,3 @@
 - title   : View on GitHub
   link    : https://github.com/mgiaccone/restelio
   target  : _blank
-
-#- id        : contribute
-#  title     : Contribute
-#  hideflat  : true
-#  items     :
-
-
-#      - title   : Source
-#        link    : https://github.com/mgiaccone/restelio
-#        target  : _self

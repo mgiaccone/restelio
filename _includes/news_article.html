@@ -1,0 +1,8 @@
+<article>
+    <h2>{{ page.title }}</h2>
+    <h4><small>Posted by {{ page.author | markdownify | remove: '<p>' | remove: '</p>' }} on {{ page.date | date_to_string }}</small></h4>
+    <!--<h4>-->
+        <!--<small>Categories: {{ page.categories | array_to_sentence_string }}</small>-->
+    <!--</h4>-->
+    <div>{{ page.content | markdownify }}</div>
+</article>
