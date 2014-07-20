@@ -14,11 +14,6 @@
  * limitations under the License.
  */
 
-rootProject.name = 'restelio'
-
-include 'restelio-core'
-include 'restelio-http-servlet'
-include 'restelio-http-netty'
-include ':restelio-sample:restelio-sample-core'
-include ':restelio-sample:restelio-sample-servlet'
-
+dependencies {
+    compile project(':restelio-core')
+}
