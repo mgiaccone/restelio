@@ -5637,6 +5637,10 @@ body {
 .rio-news-readmore {
   padding-top: 8px;
 }
+.rio-news-body {
+  padding-top: 1em;
+  font-size: 16px;
+}
 .rio-faq-summary {
   padding: 1em 2em;
 }
