@@ -14,6 +14,21 @@
  * limitations under the License.
  */
 
+apply plugin: "jetty"
+apply plugin: "war"
+
 dependencies {
-    project(":restelio-core")
+    compile project(":restelio-http-servlet"),
+            project(":restelio-sample:restelio-sample-core")
+
+    providedCompile "javax.servlet:servlet-api:${servletVersion}"
 }
+
+jettyRun {
+    contextPath = "/"
+}
+
+war {
+    archiveName "${project.name}.war"
+}
+

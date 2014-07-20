@@ -14,6 +14,14 @@
  * limitations under the License.
  */
 
-dependencies {
-    project(":restelio-core")
+package restelio.util;
+
+import java.util.regex.Pattern;
+
+public class RegexUtil {
+
+    public static Pattern compileFroromGlobalExpression(String expression) {
+          return null;
+    }
+
 }
