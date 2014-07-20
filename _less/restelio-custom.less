@@ -22,6 +22,14 @@ html, body {
   z-index: 1;
 }
 
+#rio-header {
+  font-size: 16px;
+}
+
+.rio-page-content {
+  padding-bottom: @padding-xs-vertical;
+}
+
 // Breadcrumb
 #rio-breadcrumb {
   font-size: 0.9em;
@@ -29,15 +37,10 @@ html, body {
   margin-top: @rio-navbar-height;
 }
 
-// API
-//.api .rio-breadcrumb {
-//  margin-bottom: 0;
-//}
-
 // FAQ
-.rio-faq-target {
-  padding-top: @rio-navbar-height;
-  margin-top: -@rio-navbar-height;
+.rio-faq-summary {
+//  margin-left: (@grid-gutter-width / 2) + 4;;
+  padding: 1em 2em;//(@grid-gutter-width / 2) + 4;
 }
 
 @media (min-width: @screen-sm-min) {
@@ -46,18 +49,20 @@ html, body {
     padding-left: @navbar-padding-horizontal;
   }
 
-//  // Drawer
-//  .rio-drawer-container {
-//    margin-top: @rio-header-height;
-//  }
-
+  .rio-page-content {
+    padding-bottom: @padding-small-vertical;
+  }
 }
 
 @media (min-width: @screen-md-min) {
-  float: right;
+  .rio-page-content {
+    padding-bottom: @padding-base-vertical;
+  }
 }
 
 @media (min-width: @screen-lg-min) {
-
+  .rio-page-content {
+    padding-bottom: @padding-large-vertical;
+  }
 }
 

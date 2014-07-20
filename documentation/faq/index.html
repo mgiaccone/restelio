@@ -11,30 +11,36 @@ breadcrumbs:
 ---
 
 <div class="container-fluid">
+    <!--<div class="row">-->
+        <!--<div class="col-sm-12">-->
+            <!--<h2 id="top" class="rio-faq-target">{{ page.title }}</h2>-->
+        <!--</div>-->
+    <!--</div>-->
+
     <div class="row">
-
+        <div class="col-xs-12">
+                <ol class="rio-faq-summary">
+                    {% for faq in site.data.faqs %}
+                    <li class="rio-faq-question"><a href="#faq{{ faq.id }}">{{ faq.question }}</a></li>
+                    {% endfor %}
+                </ol>
+        </div>
     </div>
-</div>
 
-
-<h2 id="top" class="rio-faq-target">FAQ</h2>
-<div class="rio-faq-summary">
-    <ul>
     {% for faq in site.data.faqs %}
-    <li class="rio-faq-question"><a href="#faq{{ faq.id }}">{{ faq.question }}</a></li>
+    <div class="row">
+        <div class="col-xs-12">
+            <h4 id="faq{{ faq.id }}" class="rio-faq-target">{{ faq.question }}</h4>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12"><p>{{ faq.answer }}</p></div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <a class="pull-right" href="#top">Top <span class="glyphicon glyphicon-chevron-up"></span></a>
+        </div>
+    </div>
+
     {% endfor %}
-    </ul>
-</div>
-
-
-<div class="rio-faq-answers">
-    <ul>
-        {% for faq in site.data.faqs %}
-
-        <li><a href="#top">Top <span class="glyphicon glyphicon-chevron-up"></span></a></li>
-        <li class="rio-faq-question"><h4 id="faq{{ faq.id }}" class="rio-faq-target">{{ faq.question }}</h4></li>
-        <li class="rio-faq-answer">{{ faq.answer }}</li>
-        <br/>
-        {% endfor %}
-    </ul>
 </div>

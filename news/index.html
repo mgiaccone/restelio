@@ -1,12 +1,46 @@
 ---
-class   : news
-layout  : default
-title   : News
-breadcrumbs:
+class       : news
+layout      : default
+title       : News
+permalink   : /news/
+breadcrumbs :
     - title     : Home
       link      : /
     - title     : News
+author      : all
 ---
 
+<div class="container">
+    <div class="row">
+        <!-- Content -->
+        <div class="col-sm-8 blog-main">
+            {% for post in site.posts %}
+            {% include news_index_item.html %}
+            {% endfor %}
+        </div>
 
-NEWS INDEX!!!!
+        <!-- Sidebar -->
+        <div class="col-sm-3 col-sm-offset-1">
+            <h3>Archives</h3>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Categories</h3>
+                </div>
+                <div class="panel-body">
+                    Panel content
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">By Month</h3>
+                </div>
+                <div class="panel-body">
+                    Panel content
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

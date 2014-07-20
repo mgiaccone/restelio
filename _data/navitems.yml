@@ -3,10 +3,16 @@
   link    : /quickstart
   target  : _self
 
-- id      : documentation
-  title   : Documentation
-  link    : /documentation
-  items   :
+- id      : news
+  title   : News
+  link    : /news
+  target  : _self
+
+- id        : documentation
+  title     : Documentation
+  link      : /documentation
+  hideflat  : true
+  items     :
       - id      : api
         title   : API Reference
         link    : /documentation/api
@@ -25,21 +31,19 @@
         link    : \#
         target  : _self
 
-- id      : news
-  title   : News
-  link    : /news
-  target  : _self
-
-- id      : contribute
-  title   : Contribute
-  items   :
-      - title   : Source on GitHub
-        link    : https://github.com/mgiaccone/restelio
-        target  : _blank
-
       - title   : Contributors
         link    : https://github.com/mgiaccone/restelio/graphs/contributors
         target  : _blank
+
+- title   : View on GitHub
+  link    : https://github.com/mgiaccone/restelio
+  target  : _blank
+
+#- id        : contribute
+#  title     : Contribute
+#  hideflat  : true
+#  items     :
+
 
 #      - title   : Source
 #        link    : https://github.com/mgiaccone/restelio
