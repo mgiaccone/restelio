@@ -5621,6 +5621,10 @@ body {
 #rio-header {
   font-size: 16px;
 }
+.rio-work-in-progress {
+  padding: 64px 0;
+  text-align: center;
+}
 .rio-page-content .container,
 .rio-page-content .container-fluid {
   padding-bottom: 32px;

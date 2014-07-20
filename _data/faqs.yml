@@ -1,6 +1,6 @@
 - id        : 1
   question  : Another REST framework.. Why?
-  answer    : Well... why not?
+  answer    : "Well... why not? Like most projects, the idea comes from frustration and I feel the REST framework scenario in Java can still be improved. Don't get me wrong, there are plenty of great projects available! But I want to reduce the time it takes to get a new application out and try to simplify as much as possible all the boilerplate code required to get a REST web service ready."
 
 - id        : 2
   question  : I'm a developer, how can I contribute?
